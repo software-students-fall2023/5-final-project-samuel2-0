@@ -2,15 +2,16 @@ version: '3'
 
 services:
   web:
-    image: "web:latest"
+    image: "app"
     build: .
     ports:
       - "5000:5000"
     depends_on:
       - mongo
-    environment: 
+    environment:
       FLASK_APP: app/app.py
     
+
   mongo:
     image: "mongo:latest"
     ports:
