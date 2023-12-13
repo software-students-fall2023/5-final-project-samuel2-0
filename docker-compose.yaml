@@ -16,5 +16,3 @@ services:
     image: "mongo:latest"
     ports:
       - "27017:27017"
-    volumes:
-      - ./database:/data/db
