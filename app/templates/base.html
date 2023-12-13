@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flask-MongoDB Example App</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Letterbox App</h1>
+        <nav>
+          <a href="{{ url_for('welcome')}}">Home</a>
+        </nav>
+      </header>
+      <main>{% block container %} {% endblock %}</main>
+      <footer>
+        <p>
+          Write a letter to a friend
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
