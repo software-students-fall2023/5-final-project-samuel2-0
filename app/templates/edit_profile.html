@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Edit Profile</h2>
+  <form method="post" action="{{ url_for('edit_profile') }}">
+    {{ form.hidden_tag() }}
+    
+    <div class="form-group">
+      <label for="username">Username:</label>
+      {{ form.username(class="form-control", id="username") }}
+    </div>
+    
+    <div class="form-group">
+      <label for="age">Age:</label>
+      {{ form.age(class="form-control", id="age") }}
+    </div>
+    
+    <div class="form-group">
+      <label for="country">Country:</label>
+      {{ form.country(class="form-control", id="country") }}
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </form>
+{% endblock %}

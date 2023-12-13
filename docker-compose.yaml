@@ -2,18 +2,19 @@ version: '3'
 
 services:
   web:
-    image: "app"
-    build: .
+    build:
+      context: . 
+      dockerfile: ./app/Dockerfile
     ports:
-      - "5000:5000"
+      - "5002:5000"
     depends_on:
-      - mongo
+      - mongodb
     environment:
       FLASK_APP: app/app.py
     
-
-  mongo:
+  mongodb:
     image: "mongo:latest"
     ports:
       - "27017:27017"
-    
+    volumes:
+      - ./database:/data/db

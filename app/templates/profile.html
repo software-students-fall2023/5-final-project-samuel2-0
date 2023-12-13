@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {%block content %}
+
+<div>
+  <h1>User Profile</h1>
+
+  <a href="{{ url_for('edit_profile',user_id=user._id)}}" method="GET">
+    <button class="editBtn">edit</button>
+  </a>
+  <div class="user-fields">
+    <h2>{{ user.username }}</h2>
+    <p>Name: {{user.name}}</p>
+    <p>Age: {{user.age}}</p>
+    <p>Country: {{user.country}}</p>
+  </div>
+</div>
+
+<div id="aboutMeSection">
+  <h3>About Me</h3>
+  <p>{{ user.about_me }}</p>
+  <a href="{{ url_for('edit_about', user_id=user._id) }}" method="GET">
+    <button class="editBtn">Edit About</button>
+  </a>
+</div>
+
+<div id="languagesSection">
+  <h3>Languages</h3>
+  <p>{{ user.languages }}</p>
+  <a href="{{ url_for('edit_languages', user_id=user._id) }}" method="GET">
+    <button class="editBtn">Edit Languages</button>
+  </a>
+</div>
+
+<div id="interestsSection">
+  <h3>Interests</h3>
+  <p>{{ user.interests }}</p>
+  <a href="{{ url_for('edit_interests', user_id=user._id) }}" method="GET">
+    <button class="editBtn">Edit Interests</button>
+  </a>
+</div>
+
+{% endblock %}
