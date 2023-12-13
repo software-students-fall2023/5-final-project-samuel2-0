@@ -1,11 +1,9 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>My Webpage</title>
-</head>
-<body>
-   <h2>  Login </h2>
+
+{% extends 'base.html' %} 
+{% block container %}
+
+   <h2> Login </h2>
 
    <form action="" method="get" class="login-form">
    
@@ -23,5 +21,6 @@
     </div>
   </form>
 
-</body>
-</html>
+  {% endblock %}
+
+
