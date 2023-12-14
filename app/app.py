@@ -201,8 +201,10 @@ def edit_interests(user_id):
 def update_interests(user_id):
     user = get_user(user_id)
     if user:
-        user['interests'] = request.form['interests']
-        users_collection.update_one({"_id": user["_id"]}, {"$set": {"interests": request.form["interests"]}})
+        new_interests = request.form.getlist('interests[]')  
+        user['interests'] = new_interests
+        users_collection.update_one({"_id": ObjectId(user["_id"])}, {"$set": {"interests": new_interests}})
+
         return render_template("profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
@@ -219,8 +221,9 @@ def edit_languages(user_id):
 def update_languages(user_id):
     user = get_user(user_id)
     if user:
-        user['languages'] = request.form['languages']
-        users_collection.update_one({"_id": user["_id"]}, {"$set": {"languages": request.form["languages"]}})
+        new_languages = request.form.getlist('languages[]')  
+        user['languages'] = new_languages
+        users_collection.update_one({"_id": ObjectId(user["_id"])}, {"$set": {"languages": new_languages}})
         return render_template("profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
