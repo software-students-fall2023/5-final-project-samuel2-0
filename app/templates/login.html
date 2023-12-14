@@ -5,7 +5,7 @@
 
    <h2> Login </h2>
 
-   <form action="" method="get" class="login-form">
+   <form action="" method="post" class="login-form">
    
     <div class="login-form">
       <label for="email">Enter your email: </label>
@@ -14,12 +14,25 @@
     <div class="login-form">
         <label for="password">Enter your password: </label>
         <input type="password" name="password" id="password" required />
+        
+    
       </div>
 
     <div class="login-form">
       <input type="submit" value="log in!" />
     </div>
   </form>
+
+  {% if incorrect_pass %}
+  <p style="color: red;">Passwords do not match. Please try again.</p>
+  {% endif %}
+
+  {% if incorrect_email %}
+  <p style="color: red;">Email not found. Please try again.</p>
+  {% endif %}
+
+  
+  
 
   {% endblock %}
 
