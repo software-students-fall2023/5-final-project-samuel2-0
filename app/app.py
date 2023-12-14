@@ -31,7 +31,6 @@ db = client["letterbox_db"]
 users_collection = db['users']
 
 fake_user = {
-    "_id": "1",
     "username": "johndoe",
     "name": "John Doe",
     "age": "25",
@@ -101,21 +100,41 @@ def signup():
     
     if request.method == 'POST':
 
-        username = request.form["name"]
+        username = request.form["username"]
         email = request.form["email"]
         password = request.form["password"]
+        first_name = request.form["first_name"]
+        last_name = request.form["last_name"]
+        
 
         #check if user already exists, if so redirect to log in
         user = db.users.find_one({"name": username})
         if(user is not None):
             print("user already exists")
             return redirect(url_for("login"))
+        
+        """
+        'about'
+        'country'
+        'age'
+        'languages'
+        'interests'
+        """
 
         #if user is None, create a new account
         account = {"email": email,
-                "name": username,
+                "username": username,
                 "password": password,
+                "first_name":first_name,
+                "last_name":last_name,
+                "name" : first_name + " " + last_name,
+                "about_me": "I am testing about1",
+                "age" : 22,
+                "languages" : "English",
+                "interests" : "Food",
+                "country" : "USA"
                 }
+        print("account", account)
         
         db.users.insert_one(account)
         
@@ -154,21 +173,22 @@ def myprofile(user_id):
     #if(user_id == "1" and users_collection.count_documents({'_id': user_id}) == 0):
         #users_collection.insert_one(fake_user)
     user = get_user(user_id)
+    #print("getting user ", user)
     if user:
+        
         return render_template("profile.html", user=user)
     else:
          return render_template("404.html", message='User not found. Log in first.'), 404
 
 
-"""
-@app.route("/profile/<user_id>/edit_profile")
+
+@app.route("/profile/<user_id>/edit_profile", methods=["GET"])
 def edit_profile(user_id):
     user = get_user(user_id)
     if user:
         return render_template("edit_profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
-    
 
 
 
@@ -176,11 +196,24 @@ def edit_profile(user_id):
 def update_profile(user_id):
     user = get_user(user_id)
     if user:
-        user['username'] = request.form['username']
-        user['name'] = request.form['name']
-        user['age'] = request.form['age']
-        user['country'] = request.form['country']
-        users_collection.save(user)
+        username = request.form['username']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        age = request.form['age']
+        country = request.form['country']
+
+        myquery = {"_id": ObjectId(user.get("_id"))}
+
+        doc = {"$set":{"username":username,
+                       "first_name":first_name,
+                       "last_name":last_name,
+                       "name": first_name + " " + last_name,
+                       "age":age,
+                       "country": country
+                       }}
+        
+        users_collection.update_one(myquery,doc)
+       
         return render_template("profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
@@ -221,10 +254,11 @@ def update_languages(user_id):
     else:
        return 'User not found. Log in first.', 404
     
-@app.route("/profile/<user_id>/edit_about")
+@app.route("/profile/<user_id>/edit_about", methods=["GET"])
 def edit_about(user_id):
     user = get_user(user_id)
     if user:
+        print("I am in edit about")
         return render_template("edit_about.html", user=user)
     else:
        return 'User not found. Log in first.', 404
@@ -234,11 +268,12 @@ def update_about(user_id):
     user = get_user(user_id)
     if user:
         user['about'] = request.form['about']
-        users_collection.save(user)
+        #users_collection.save(user)
         return render_template("profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
-"""
+    
+
 
 '''
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
