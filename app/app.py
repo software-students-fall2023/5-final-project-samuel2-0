@@ -11,12 +11,9 @@ from flask import (
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-
-#"mongodb://mongo:27017/"
 def connection_db():
     """
     Connect to DB
@@ -25,24 +22,10 @@ def connection_db():
 
 client = connection_db()
 db = client["letterbox_db"]
-
-
-#db = client["db"]
 users_collection = db['users']
 
-fake_user = {
-    "username": "johndoe",
-    "name": "John Doe",
-    "age": "25",
-    "country": "USA",
-    "interests": "Sports",
-    "languages": "English"
-}
-
-
 def get_user(user_id):
-    
-    print("ahhhh",users_collection.find_one({'_id': ObjectId(user_id)}))
+    print(users_collection.find_one({'_id': ObjectId(user_id)}))
     return users_collection.find_one({'_id': ObjectId(user_id)})
 
 @app.route("/")
@@ -50,7 +33,6 @@ def welcome():
     if "userid" in session:
         return render_template("index.html",name=session["name"])
     return render_template("index.html")
-
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -99,20 +81,16 @@ def signup():
     """
     
     if request.method == 'POST':
-
         username = request.form["username"]
         email = request.form["email"]
         password = request.form["password"]
         first_name = request.form["first_name"]
         last_name = request.form["last_name"]
         
-
-        #check if user already exists, if so redirect to log in
         user = db.users.find_one({"name": username})
         if(user is not None):
             print("user already exists")
             return redirect(url_for("login"))
-        
         """
         'about'
         'country'
@@ -140,13 +118,10 @@ def signup():
         
         new_user = db.users.find_one({"name":username})
         if new_user is not None:
-            #print(type(str(new_user["_id"])))
             session["userid"] = str(new_user["_id"])
             session["email"] = new_user["email"]
             session["name"] = new_user["name"]
             print(session)
-        
-        
     else:
         return render_template("signup.html")
     
@@ -168,18 +143,13 @@ def inbox():
     return render_template("inbox.html")
 
 
-@app.route("/profile/<user_id>", methods=["GET", "POST"])
+@app.route("/profile/<user_id>", methods=["GET"])
 def myprofile(user_id):
-    #if(user_id == "1" and users_collection.count_documents({'_id': user_id}) == 0):
-        #users_collection.insert_one(fake_user)
     user = get_user(user_id)
-    #print("getting user ", user)
     if user:
-        
         return render_template("profile.html", user=user)
     else:
          return render_template("404.html", message='User not found. Log in first.'), 404
-
 
 
 @app.route("/profile/<user_id>/edit_profile", methods=["GET"])
@@ -191,7 +161,6 @@ def edit_profile(user_id):
        return 'User not found. Log in first.', 404
 
 
-
 @app.route("/profile/<user_id>/edit_profile", methods=["POST"])
 def update_profile(user_id):
     user = get_user(user_id)
@@ -201,9 +170,7 @@ def update_profile(user_id):
         last_name = request.form['last_name']
         age = request.form['age']
         country = request.form['country']
-
         myquery = {"_id": ObjectId(user.get("_id"))}
-
         doc = {"$set":{"username":username,
                        "first_name":first_name,
                        "last_name":last_name,
@@ -211,14 +178,18 @@ def update_profile(user_id):
                        "age":age,
                        "country": country
                        }}
-        
         users_collection.update_one(myquery,doc)
-       
+        user['username'] = username
+        user['first_name'] = first_name
+        user['last_name'] = last_name
+        user['name'] = first_name + " " + last_name
+        user['age'] = age
+        user['country'] = country
         return render_template("profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
 
-@app.route("/profile/<user_id>/edit_interests")
+@app.route("/profile/<user_id>/edit_interests", methods=["GET"])
 def edit_interests(user_id):
     user = get_user(user_id)
     if user:
@@ -230,8 +201,10 @@ def edit_interests(user_id):
 def update_interests(user_id):
     user = get_user(user_id)
     if user:
-        user['interests'] = request.form['interests']
-        users_collection.save(user)
+        new_interests = request.form.getlist('interests[]')  
+        user['interests'] = new_interests
+        users_collection.update_one({"_id": ObjectId(user["_id"])}, {"$set": {"interests": new_interests}})
+
         return render_template("profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
@@ -248,8 +221,9 @@ def edit_languages(user_id):
 def update_languages(user_id):
     user = get_user(user_id)
     if user:
-        user['languages'] = request.form['languages']
-        users_collection.save(user)
+        new_languages = request.form.getlist('languages[]')  
+        user['languages'] = new_languages
+        users_collection.update_one({"_id": ObjectId(user["_id"])}, {"$set": {"languages": new_languages}})
         return render_template("profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
@@ -258,7 +232,6 @@ def update_languages(user_id):
 def edit_about(user_id):
     user = get_user(user_id)
     if user:
-        print("I am in edit about")
         return render_template("edit_about.html", user=user)
     else:
        return 'User not found. Log in first.', 404
@@ -267,32 +240,15 @@ def edit_about(user_id):
 def update_about(user_id):
     user = get_user(user_id)
     if user:
-        user['about'] = request.form['about']
-        #users_collection.save(user)
+        user['about_me'] = request.form['about']
+        users_collection.update_one({"_id": user["_id"]}, {"$set": {"about_me": request.form["about"]}})
         return render_template("profile.html", user=user)
     else:
        return 'User not found. Log in first.', 404
     
 
-
-'''
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-@app.route('/upload_picture/<user_id>', methods=['GET', 'POST'])
-def upload_picture(user_id):
-    return "good"
-
-'''
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
-
-
 
 
 
