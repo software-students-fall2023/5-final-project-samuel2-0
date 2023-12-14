@@ -48,7 +48,7 @@ def get_user(user_id):
 @app.route("/")
 def welcome():
     if "userid" in session:
-        return render_template("index.html",name=session["name"])
+        return render_template("index.html",name=session["username"])
     return render_template("index.html")
 
 
@@ -80,7 +80,7 @@ def login():
             else:
                 session["userid"] = str(user["_id"])
                 session["email"] = user["email"]
-                session["name"] = user["name"]
+                session["username"] = user["username"]
                 return redirect(url_for("welcome"))
             
         return render_template("login.html",incorrect_pass=incorrect_pass,incorrect_email=incorrect_email)
@@ -138,12 +138,14 @@ def signup():
         
         db.users.insert_one(account)
         
-        new_user = db.users.find_one({"name":username})
+        new_user = db.users.find_one({"username":username})
+        print("hello")
+        print("nw user", new_user)
         if new_user is not None:
             #print(type(str(new_user["_id"])))
             session["userid"] = str(new_user["_id"])
             session["email"] = new_user["email"]
-            session["name"] = new_user["name"]
+            session["username"] = new_user["username"]
             print(session)
         
         
@@ -158,7 +160,7 @@ def logout():
     if "userid" in session :
         session.pop("userid", None)
         session.pop("email", None)
-        session.pop("name", None)
+        session.pop("username", None)
 
     return redirect(url_for("welcome"))
 
