@@ -1,17 +1,19 @@
 
-
+import os
 from flask import (
     Flask,
     render_template,
     redirect,
     url_for,
-    request
+    request,
+    session
     )
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 
 #"mongodb://mongo:27017/"
@@ -26,6 +28,8 @@ db = client["letterbox_db"]
 
 @app.route("/", methods=["GET"])
 def welcome():
+    if "userid" in session:
+        return render_template("index.html",name=session["name"])
     return render_template("index.html")
 
 
@@ -55,6 +59,9 @@ def login():
                 print("INCORRECT PASSWORD")
                 
             else:
+                session["userid"] = str(user["_id"])
+                session["email"] = user["email"]
+                session["name"] = user["name"]
                 return redirect(url_for("welcome"))
             
         return render_template("login.html",incorrect_pass=incorrect_pass,incorrect_email=incorrect_email)
@@ -92,10 +99,28 @@ def signup():
         
         db.users.insert_one(account)
         
+        new_user = db.users.find_one({"name":username})
+        if new_user is not None:
+            #print(type(str(new_user["_id"])))
+            session["userid"] = str(new_user["_id"])
+            session["email"] = new_user["email"]
+            session["name"] = new_user["name"]
+            print(session)
+        
         
     else:
         return render_template("signup.html")
     
+    return redirect(url_for("welcome"))
+
+
+@app.route("/logout")
+def logout():
+    if "userid" in session :
+        session.pop("userid", None)
+        session.pop("email", None)
+        session.pop("name", None)
+
     return redirect(url_for("welcome"))
 
 
