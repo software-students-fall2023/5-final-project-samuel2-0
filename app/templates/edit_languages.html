@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
   <h2>Edit Languages</h2>
-  <form method="post" action="{{ url_for('edit_languages') }}">
+  <form method="post" action="{{ url_for('edit_languages', user_id = user._id) }}">
     {{ form.hidden_tag() }}
     <div class="form-group">
       <label for="languages">Languages:</label>
