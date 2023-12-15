@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h1>Find Friends</h1>
+{% if all_users %}
+    <ul>
+        {% for user in all_users %}
+            <li>
+                <strong>{{ user.username }}</strong>
+                <form method="get" action="{{ url_for('pal_profile', user_id=user._id) }}">
+                    <button type="submit" class="btn btn-primary">See Profile</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No users found.</p>
+{% endif %}
+
+{% endblock %}

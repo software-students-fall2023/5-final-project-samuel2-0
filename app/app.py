@@ -24,12 +24,14 @@ def get_user(user_id):
     print(users_collection.find_one({"_id": ObjectId(user_id)}))
     return users_collection.find_one({"_id": ObjectId(user_id)})
 
+def get_all_users():
+    return users_collection.find()
+
 @app.route("/")
 def welcome():
     if "userid" in session:
         return render_template("index.html", name=session["username"])
     return render_template("index.html")
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -58,15 +60,13 @@ def login():
                 session["userid"] = str(user["_id"])
                 session["email"] = user["email"]
                 session["username"] = user["username"]
-                return redirect(url_for("personal_info"))
+                return redirect(url_for("inbox"))
 
         return render_template(
             "login.html", incorrect_pass=incorrect_pass, incorrect_email=incorrect_email
         )
-
     if request.method == "GET":
         return render_template("login.html")
-
     return redirect(url_for("signup"))
 
 
@@ -297,18 +297,19 @@ def update_about():
     else:
         return render_template("404.html", message="User not found. Log in first."), 404
 
-@app.route("/pal_profile/<user_id>", methods=["GET"])
+@app.route("/pal_profile", methods=["GET"])
 def pal_profile():
     if "userid" in session:
         userid = session["userid"]
         user = get_user(userid)
         if user:
-            return render_template("friend_profile.html", user=user)
+            friend_id = request.form.get("user_id")
+            return render_template("friend_profile.html", user_id=friend_id)
     else:
        return render_template("404.html", message="User not found. Log in first."), 404
 
 
-@app.route("/pal_profile/<user_id>", methods=["POST"])
+@app.route("/pal_profile", methods=["POST"])
 def add_friend(user_id):
     try:
         user = get_user(user_id)
@@ -336,10 +337,11 @@ def add_friend(user_id):
 def send_letter():
     try:
         if "userid" in session:
+            userid = session["userid"]
+            user = get_user(userid)
             if request.method == "GET":
-                return render_template("send_letter.html", to_user_id='')
+                return render_template("send_letter.html", user=user)
             else:
-                    
                 sender_id = session["userid"]
                 receiver_id = request.form.get("receiver_id")
                 letter_text = request.form.get("letter_text")
@@ -363,6 +365,26 @@ def send_letter():
         print(f"Error sending letter: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/my_friends", methods=["GET"])
+def my_friends():
+    if "userid" in session:
+        userid = session["userid"]
+        user = get_user(userid)
+        if user:
+            return render_template("my_friends.html", user=user)
+    else:
+        return render_template("404.html", message="User not found. Log in first."), 404
+
+@app.route("/find_friends", methods=["GET"])
+def find_friends():
+    if "userid" in session:
+        userid = session["userid"]
+        user = get_user(userid)
+        all_users = get_all_users()
+        if user:
+            return render_template("find_friends.html", all_users=all_users)
+    else:
+        return render_template("404.html", message="User not found. Log in first."), 404
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

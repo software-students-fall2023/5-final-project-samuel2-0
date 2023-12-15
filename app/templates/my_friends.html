@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block container %}
+  <h2>Your Friends</h2>
+
+  <div id="friends-list">
+    {% if user.friends %}
+      <ul>
+        {% for friend in user.friends %}
+          <li>{{ friend }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>You don't have any friends yet. :</p>
+    {% endif %}
+  </div>
+
+{% endblock %}

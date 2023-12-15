@@ -1,11 +1,9 @@
-{% extends 'base.html' %} 
-{% block container %}
+<!DOCTYPE html>
+<html>
+
 <h2>Personal Info</h2>
 
-
-
 <form action="{{url_for('personal_info')}}" method="post" class="personal-info-form">
-   
     <div class="personal-info-form">
         <label for="country">Country</label><span style="color: red !important; display: inline; float: none;">*</span>      
         <select id="country" name="country" class="form-control">
@@ -332,4 +330,4 @@
 
 
 
-{% endblock %}
+</html>
