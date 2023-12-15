@@ -189,6 +189,26 @@ def update_profile(user_id):
     else:
        return 'User not found. Log in first.', 404
 
+@app.route("/pal_profile/<user_id>", methods=["GET"])
+def pal_profile(user_id):
+    user = get_user(user_id)
+    if user:
+        return render_template("friend_profile.html", user=user)
+    else:
+       return 'User not found. Log in first.', 404
+    
+@app.route("/pal_profile/<user_id>", methods=["POST"])
+def add_friend(user_id):
+    user = get_user(user_id)
+    if user:
+        friend= request.form['friend_id']
+        user['friends'].append(friend)
+        users_collection.update_one({"_id": ObjectId(user["_id"])}, {"$set": {"friends": user['friends']}})
+        return render_template("friend_profile.html", user=user)
+    else:
+       return 'User not found. Log in first.', 404
+
+
 @app.route("/profile/<user_id>/edit_interests", methods=["GET"])
 def edit_interests(user_id):
     user = get_user(user_id)
