@@ -91,13 +91,7 @@ def signup():
         if(user is not None):
             print("user already exists")
             return redirect(url_for("login"))
-        """
-        'about'
-        'country'
-        'age'
-        'languages'
-        'interests'
-        """
+       
 
         #if user is None, create a new account
         account = {"email": email,
@@ -106,11 +100,8 @@ def signup():
                 "first_name":first_name,
                 "last_name":last_name,
                 "name" : first_name + " " + last_name,
-                "about_me": "I am testing about1",
-                "age" : 22,
-                "languages" : "English",
-                "interests" : "Food",
-                "country" : "USA"
+                "languages":[],
+                "interests":[]
                 }
         print("account", account)
         
@@ -127,7 +118,7 @@ def signup():
     else:
         return render_template("signup.html")
     
-    return redirect(url_for("welcome"))
+    return redirect(url_for("personal_info"))
 
 
 @app.route("/logout")
@@ -143,6 +134,34 @@ def logout():
 @app.route("/inbox")
 def inbox():
     return render_template("inbox.html")
+
+@app.route("/personal_info", methods=["GET","POST"])
+def personal_info():
+    if "userid" in session:
+        userid = session["userid"]
+        user = users_collection.find_one({"_id":ObjectId(userid)})
+        print("user",user)
+        if user: 
+            if request.method == "GET":
+                return render_template("personal_info.html", user=user)
+            elif request.method == "POST":
+                country = request.form["country"]
+                about_me = request.form["about_me"]
+                age = request.form["age"]
+                languages = request.form.getlist("languages[]")
+                interests = request.form.getlist("interests[]")
+                users_collection.update_one({"_id": ObjectId(user.get("_id"))}, 
+                                            {"$set": {
+                                                "languages": languages,
+                                                "interests": interests,
+                                                "age":age,
+                                                "about_me":about_me,
+                                                "country":country} })
+                print(country,about_me,age,languages,interests)
+                return redirect(url_for("myprofile",user_id=user.get("_id")))
+
+
+    return redirect(url_for("welcome"))
 
 
 @app.route("/profile/<user_id>", methods=["GET"])
