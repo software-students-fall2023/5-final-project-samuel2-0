@@ -1,32 +1,77 @@
 <!DOCTYPE html>
 <html>
-    
-  <head>
+
+<head>
     <title>Letterbox App</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <style>
+        /* Add your custom styles for the navigation bar here */
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
 
-  </head>
-  <body>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #4CAF50;
+            padding: 10px;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        nav a {
+            margin-right: 15px;
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
     <div class="container">
-      <header>
-        <h1>Letterbox App</h1>
-        <nav>
-          <a href="{{ url_for('welcome')}}">Home</a>
-        </nav>
-      </header>
-      <main>{% block container %} {% endblock %}</main>
-      <footer>
-        <p>
-          Write a letter to a friend
-        </p>
-      </footer>
+        <header>
+            <h1>Letterbox App</h1>
+            <nav>
+                <a href="{{ url_for('inbox')}}">Inbox</a>
+                <a href="{{ url_for('send_letter')}}">Compose</a>
+                <a href="{{ url_for('myprofile')}}">Profile</a>
+            </nav>
+        </header>
+        <main>
+            {% block container %} {% endblock %}
+        </main>
+        <footer>
+            <p>
+                Write a letter to a friend
+            </p>
+        </footer>
     </div>
-  </body>
+</body>
 
 </html>

@@ -3,9 +3,12 @@
 <div>
   <h1>{{user.username}} profile</h1>
 
-  <div id="addFriendButton">
-    <form method="post" action="{{ url_for('edit_languages', user_id=user._id) }}" id="languages-form">
-  </div>
+  <form method="post" action="{{ url_for('add_friend', user_id=user._id) }}" id="addFriendForm">
+    <input type="hidden" name="friend_id" value="{{ user._id }}">
+    <button type="submit" class="btn btn-primary">Add Friend</button>
+    </form>
+
+</div>
   
   <div class="user-fields">
     <h2>{{ user.username }}</h2>
