@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {%block container %}
+
+<div>
+  <h1>{{user.username}} profile</h1>
+
+  <form method="post" action="{{ url_for('add_friend', user_id=user._id) }}" id="addFriendForm">
+    <input type="hidden" name="friend_id" value="{{ user._id }}">
+    <button type="submit" class="btn btn-primary">Add Friend</button>
+    </form>
+
+</div>
+  
+  <div class="user-fields">
+    <h2>{{ user.username }}</h2>
+    <p>Name: {{user.name}}</p>
+    <p>Age: {{user.age}}</p>
+    <p>Country: {{user.country}}</p>
+  </div>
+</div>
+ 
+<div id="aboutMeSection">
+  <h3>About Me</h3>
+  <p>{{ user.about_me }}</p>
+</div>
+
+<div id="languagesSection">
+  <h3>Languages</h3>
+  <p>{{ user.languages }}</p>
+</div>
+
+<div id="interestsSection">
+  <h3>Interests</h3>
+  <p>{{ user.interests }}</p>
+</div>
+
+{% endblock %}

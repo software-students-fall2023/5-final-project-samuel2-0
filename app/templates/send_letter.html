@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<h1>Compose Message</h1>
+
+<form id="messageForm" method="post" action="{{ url_for('send_letter') }}">
+    <div>
+        <label for="to">To:</label>
+        <input type="text" id="to" name="receiver_id" required value="{{ to_user_id }}">
+    </div>
+    <div>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message_text" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
+
+{% endblock %}

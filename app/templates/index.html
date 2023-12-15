@@ -1,15 +1,22 @@
-<meta charset="utf-8">
-<title>welcome!</title>
-<body style="background-color:rgba(242, 255, 210, 0.738);"></body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Welcome to MyPenpal</title>
+    <style>
+        body {
+            background-color: rgba(242, 255, 210, 0.738);
+        }
+    </style>
 </head>
 <body>
-    
-<h1>letter box</h1>
-
-<h2>Results from Database</h2>
-{% if name %}
-  <p >hello {{name}}</p>
-{% endif %}
-
+    <h1>MyPenpal</h1>
+    {% if name %}
+        <p>Hello {{ name }}</p>
+    {% else %}
+        <p>Welcome to MyPenpal! Please log in or register to continue.</p>
+        <a href="{{ url_for('login') }}"><button>Login</button></a>
+        <a href="{{ url_for('signup') }}"><button>Register</button></a>
+    {% endif %}
 </body>
 </html>
