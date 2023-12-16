@@ -3,12 +3,26 @@
 
 {% block container %}
 
-<h2> Inbox </h2>
+<h1>Here is the inbox for {{user.username}}</h1>
+<form method="get" action="{{ url_for('send_letter') }}">
+    <button type="submit" class="btn btn-primary" >Write</button>
+</form>
+
+{% for letter in letters %}
+
+<div class="inbox-container">
+<p>sent from {{letter.sender_name}} at {{letter.timestamp}}</p>
+<h2>{{ letter.header }}</h2>
+<p>{{ letter.letter_text }}</p>
 
 
+<form method="post" action="{{ url_for('remove_letter',letter_id=letter._id) }}">
+<button type="submit" class="btn btn-primary" >Delete</button>
+</form>
 
 
-
-
+<br/>
+</div>
+{% endfor %}
 
 {% endblock %}
