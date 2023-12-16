@@ -4,6 +4,9 @@
 {% block container %}
 
 <h2> Inbox </h2>
+<form method="get" action="{{ url_for('send_letter') }}">
+    <button type="submit" class="btn btn-primary" >Write</button>
+</form>
 
 {% for letter in letters %}
 

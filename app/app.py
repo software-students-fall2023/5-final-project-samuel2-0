@@ -150,7 +150,7 @@ def inbox():
 
 @app.route("/inbox/<letter_id>", methods = ["POST"])
 def remove_letter(letter_id):
-    print("triggered")
+   
     if "userid" in session:
         userid = session["userid"]
         user = users_collection.find_one({"_id":ObjectId(userid)})
@@ -167,6 +167,7 @@ def remove_letter(letter_id):
 
 
 
+"""
 @app.route("/fakeALetter")
 def fake_letter():
     sender_id = "657be1c210f97adccd73219b"
@@ -185,6 +186,7 @@ def fake_letter():
     letters_collection.insert_one(new_letter)
     print("successfully faked a letter")
     return redirect(url_for("login"))
+"""
 
 
 @app.route("/personal_info", methods=["GET", "POST"])
@@ -359,7 +361,6 @@ def pal_profile():
         userid = session["userid"]
         user = get_user(userid)
         if user:
-            # ???
             friend_id = request.form.get("user_id")
             print("frend _ id", friend_id)
             return render_template("friend_profile.html", user_id=friend_id)
@@ -405,6 +406,8 @@ def send_letter():
                 letter_text = request.form.get("letter_text")
                 sender = get_user(sender_id)
                 receiver = get_user(receiver_id)
+                print("sender and receiver",sender, receiver)
+
                 if sender and receiver:
                     new_letter = {
                         "sender_id": ObjectId(sender_id),
