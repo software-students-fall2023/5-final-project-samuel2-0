@@ -303,27 +303,19 @@ def pal_profile():
         userid = session["userid"]
         user = get_user(userid)
         if user:
-            friend_id = request.form.get("user_id")
-            return render_template("friend_profile.html", user_id=friend_id)
+            return "success"
     else:
        return render_template("404.html", message="User not found. Log in first."), 404
 
-
 @app.route("/pal_profile", methods=["POST"])
-def add_friend(user_id):
+def see_friend():
     try:
+        user_id = session["userid"]
         user = get_user(user_id)
         if user:
             friend_id = request.form.get("friend_id")
-            if "friends" not in user:
-                user["friends"] = []
-            user["friends"].append(friend_id)
             if friend_id:
-                users_collection.update_one(
-                    {"_id": ObjectId(user["_id"])},
-                    {"$set": {"friends": user["friends"]}},
-                )
-                return render_template("friend_profile.html", user=user)
+                return render_template("friend_profile.html", user=friend_id)
             else:
                 raise ValueError("Friend ID not provided in the form data.")
         else:
