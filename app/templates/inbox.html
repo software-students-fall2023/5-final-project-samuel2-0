@@ -5,10 +5,23 @@
 
 <h2> Inbox </h2>
 
+{% for letter in letters %}
+
+<div class="inbox-container">
+
+<h1>Here is the inbox for {{user.username}}</h1>
+<p>sent from {{letter.sender_name}} at {{letter.timestamp}}</p>
+<h2>{{ letter.header }}</h2>
+<p>{{ letter.letter_text }}</p>
 
 
+<form method="post" action="{{ url_for('remove_letter',letter_id=letter._id) }}">
+<button type="submit" class="btn btn-primary" >Delete</button>
+</form>
 
 
-
+<br/>
+</div>
+{% endfor %}
 
 {% endblock %}

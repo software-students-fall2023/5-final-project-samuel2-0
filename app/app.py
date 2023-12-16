@@ -18,6 +18,8 @@ def connection_db():
 client = connection_db()
 db = client["letterbox_db"]
 users_collection = db["users"]
+letters_collection = db["letters"]
+
 
 
 def get_user(user_id):
@@ -126,9 +128,63 @@ def logout():
     return redirect(url_for("welcome"))
 
 
-@app.route("/inbox")
+@app.route("/inbox", methods = ["GET"])
 def inbox():
-    return render_template("inbox.html")
+    """
+    
+    """
+    if "userid" in session:
+        userid = session["userid"]
+        user = users_collection.find_one({"_id":ObjectId(userid)})
+        print(user)
+
+        if user:
+            print("is user printintg",(userid))
+            #find all the letters whose receipients == current logged in user
+            letters = letters_collection.find({"receiver_id":ObjectId(userid)})
+            
+            
+           
+            return render_template("inbox.html", user=user, letters=letters)
+    return redirect(url_for("login"))
+
+@app.route("/inbox/<letter_id>", methods = ["POST"])
+def remove_letter(letter_id):
+    print("triggered")
+    if "userid" in session:
+        userid = session["userid"]
+        user = users_collection.find_one({"_id":ObjectId(userid)})
+        print(user)
+
+        if user:
+            letterToDelete = letters_collection.find_one({"_id":ObjectId(letter_id)})
+            letterToDeleteId = letterToDelete["_id"]
+            letters_collection.delete_one({"_id":letterToDeleteId})
+            return redirect(url_for("inbox"))
+
+            
+    return redirect(url_for("welcome"))
+
+
+
+@app.route("/fakeALetter")
+def fake_letter():
+    sender_id = "657be1c210f97adccd73219b"
+    receiver_id = "657cfca3d111878b03b0e4da"
+    sender_name = users_collection.find_one({"_id":ObjectId(sender_id)})["username"]
+    print(sender_name)
+
+    new_letter = {
+            "sender_id": ObjectId(sender_id),
+            "sender_name":sender_name,
+            "receiver_id": ObjectId(receiver_id),
+            "header": "finals are annoying",
+            "letter_text": "pass me please",
+            "timestamp": datetime.now(),
+        }
+    letters_collection.insert_one(new_letter)
+    print("successfully faked a letter")
+    return redirect(url_for("login"))
 
 
 @app.route("/personal_info", methods=["GET", "POST"])
@@ -303,7 +359,9 @@ def pal_profile():
         userid = session["userid"]
         user = get_user(userid)
         if user:
+            # ???
             friend_id = request.form.get("user_id")
+            print("frend _ id", friend_id)
             return render_template("friend_profile.html", user_id=friend_id)
     else:
        return render_template("404.html", message="User not found. Log in first."), 404
@@ -348,7 +406,6 @@ def send_letter():
                 sender = get_user(sender_id)
                 receiver = get_user(receiver_id)
                 if sender and receiver:
-                    letters_collection = db["letters"]
                     new_letter = {
                         "sender_id": ObjectId(sender_id),
                         "receiver_id": ObjectId(receiver_id),
