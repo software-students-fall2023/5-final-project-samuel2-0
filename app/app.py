@@ -141,7 +141,7 @@ def inbox():
         if user:
             print("is user printintg",(userid))
             #find all the letters whose receipients == current logged in user
-            letters = letters_collection.find({"receiver_id":ObjectId(userid)})
+            letters = letters_collection.find({"receiver_id":ObjectId(userid)}).sort("timestamp",-1)
             
             
            
@@ -167,26 +167,26 @@ def remove_letter(letter_id):
 
 
 
-"""
+
 @app.route("/fakeALetter")
 def fake_letter():
     sender_id = "657be1c210f97adccd73219b"
     receiver_id = "657cfca3d111878b03b0e4da"
     sender_name = users_collection.find_one({"_id":ObjectId(sender_id)})["username"]
-    print(sender_name)
+    
 
     new_letter = {
             "sender_id": ObjectId(sender_id),
             "sender_name":sender_name,
             "receiver_id": ObjectId(receiver_id),
-            "header": "finals are annoying",
-            "letter_text": "pass me please",
+            "header": "Holy Holy Holy",
+            "letter_text": "Hi God bless!",
             "timestamp": datetime.now(),
         }
     letters_collection.insert_one(new_letter)
     print("successfully faked a letter")
     return redirect(url_for("login"))
-"""
+
 
 
 @app.route("/personal_info", methods=["GET", "POST"])
