@@ -175,8 +175,6 @@ def read_letter(letter_id):
         if user and letter:
             print("user and letter both exist")
             print("in read letter function : ", user, letter)
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return jsonify({'user': user, 'letter': letter})
             return render_template("reading.html", user=user, letter=letter)
     return redirect(url_for("login"))
 

@@ -11,7 +11,7 @@
 
 {% for letter in letters %}
 
-<div class="inbox-container" >
+<div class="inbox-container" onclick="read_letter('{{ letter._id }}')">
     <div class="content1">
         <p class="text-left">sent from {{letter.sender_name}} at {{letter.timestamp}}</p>
         
@@ -26,9 +26,7 @@
             <button type="submit" class="btn btn-danger" >X</button>
         </form>
 
-        <form method="get" action="{{ url_for('read_letter',letter_id=letter._id) }}">
-     <button type="submit" class="btn btn-success">read </button> 
-    </form>
+        
     </div>
 
 
@@ -39,6 +37,29 @@
 
 
 {% endfor %}
+<script>
+
+    function read_letter(letterId) {
+       
+        fetch(`/read_letter/${letterId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            window.location.href = `/read_letter/${letterId}`;
+           
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
 
 {% endblock %}
+
+
 
