@@ -467,9 +467,44 @@ def find_friends():
         user = get_user(userid)
         all_users = get_all_users()
         if user:
-            return render_template("find_friends.html", all_users=all_users)
+            return render_template("find_friends.html")
     else:
         return render_template("404.html", message="User not found. Log in first."), 404
+
+
+### SAMUEL'S STUFF - DO NOT TOUCH!
+
+@app.route("/getUsersJson", methods=["GET"])
+def get_all_users_json():
+    all_users = get_all_users()
+
+    users_list = []
+    for user in all_users:  
+        new_user = {**user, '_id': str(user['_id'])}
+        users_list.append(new_user)
+    
+    return jsonify(users_list) 
+
+
+# Add friend && start letter 
+@app.route("/findUser", methods=["POST"])
+def find_user():
+    try:
+        user_id = request.form.get('userId')
+        user_id_obj = ObjectId(user_id)
+        user = db.users.find_one({'_id': user_id_obj})
+
+        print(user_id)
+
+        if user:
+            return render_template("friend_profile.html", user=user)
+        else:
+            return jsonify({'result': 'Failed, but tried'})
+
+    except Exception as e:
+        print(e)
+        return jsonify({'result': 'failed'})
+    
 
 
 if __name__ == "__main__":

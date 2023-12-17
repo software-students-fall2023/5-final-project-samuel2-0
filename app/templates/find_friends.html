@@ -1,21 +1,193 @@
 {% extends 'base.html' %}
 
-{% block container %}
+ {%block container %}
 
-<h1>Find Friends</h1>
-{% if all_users %}
-    <ul>
-        {% for user in all_users %}
-            <li>
-                <strong>{{ user.username }}</strong>
-                <form method="get" action="{{ url_for('pal_profile', user_id=user._id) }}">
-                    <button type="submit" class="btn btn-primary">See Profile</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No users found.</p>
-{% endif %}
+    <body class="letterbox"> 
 
-{% endblock %}
+        <form>
+            <label for="languageSelect">Select Language:</label>
+            <select id="languageSelect" name="language">
+                <option value="English">English</option>
+                <option value="Dutch">Dutch</option>
+                <option value="German">German</option>
+                <option value="French">French</option>
+                <option value="Slovak">Slovak</option>
+            </select>
+            <button type="button" onclick="filter_lang()">Filter Users</button>
+        </form>
+        
+        <form>
+            <label for="interestInput">Enter Interests:</label>
+            <input type="text" id="interestInput" name="interests">
+            <button type="button" onclick="filter_interest()">Filter Users</button>
+        </form>
+       
+
+        <button type="button" onclick="display_all()">Reset</button>
+
+        <div id="allLetters"> 
+            <div id="user_container">
+
+             
+
+            </div>
+        </div>
+        
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        var users = "";
+
+        $(document).ready(function() {
+            $.ajax({
+                url: '/getUsersJson',
+                type: 'GET',
+                dataType: 'json',
+                success: function(json_users) {
+                    users = json_users
+                    display_all()
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+
+        function display_all(){
+            console.log(users)
+                    
+            var userContainer = document.getElementById('user_container');
+            userContainer.innerHTML = "";
+
+            for (let i = 0; i < users.length; i++) {
+                console.log(users[i].email);
+                var userDiv = document.createElement('div');
+                userDiv.className = 'user';
+
+        
+                var paragraph = document.createElement('p');
+                paragraph.innerHTML = 'Name: ' + users[i].name + '<br>' +
+                                  'Username: ' + users[i].username + '<br>' +
+                                  'Languages: ' + users[i].languages.join(', ') + '<br>' +
+                                  'Interests: ' + users[i].interests.join(', ') + '<br>' +
+                                  'Country: ' + users[i].country + '<br>' +
+                                  'Age: ' + users[i].age;
+
+                //Add button to forward to route
+                var form = document.createElement('form');
+                form.action = '/findUser';
+                form.method = 'POST'; 
+
+                var userIdInput = document.createElement('input');
+                userIdInput.type = 'hidden';
+                userIdInput.name = 'userId';
+                userIdInput.value = String(users[i]._id);
+
+                var submitButton = document.createElement('button');
+                submitButton.type = 'submit';
+                submitButton.innerHTML = 'Find User';
+
+                form.appendChild(userIdInput);
+                form.appendChild(submitButton);
+
+                userDiv.appendChild(paragraph);
+                userDiv.appendChild(form);
+
+                userContainer.appendChild(userDiv);
+            }
+        }
+
+        function filter_lang() {
+            var lang = document.getElementById('languageSelect').value;
+
+            var userContainer = document.getElementById('user_container');
+            userContainer.innerHTML = '';
+
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].languages.includes(lang)) {
+                    var userDiv = document.createElement('div');
+                    userDiv.className = 'user';
+
+                    var paragraph = document.createElement('p');
+                    paragraph.innerHTML = 'Name: ' + users[i].name + '<br>' +
+                                  'Username: ' + users[i].username + '<br>' +
+                                  'Languages: ' + users[i].languages.join(', ') + '<br>' +
+                                  'Interests: ' + users[i].interests.join(', ') + '<br>' +
+                                  'Country: ' + users[i].country + '<br>' +
+                                  'Age: ' + users[i].age;
+
+                    // Add button to forward to route
+                    var form = document.createElement('form');
+                    form.action = '/findUser';
+                    form.method = 'POST';
+
+                    var userIdInput = document.createElement('input');
+                    userIdInput.type = 'hidden';
+                    userIdInput.name = 'userId';
+                    userIdInput.value = String(users[i]._id);
+
+                    var submitButton = document.createElement('button');
+                    submitButton.type = 'submit';
+                    submitButton.innerHTML = 'Find User';
+
+                    form.appendChild(userIdInput);
+                    form.appendChild(submitButton);
+
+                    userDiv.appendChild(paragraph);
+                    userDiv.appendChild(form);
+
+                    userContainer.appendChild(userDiv);
+                }
+            }
+        }
+
+        function filter_interest() {
+        var interests = document.getElementById('interestInput').value;
+        console.log("got here");
+
+        var userContainer = document.getElementById('user_container');
+        userContainer.innerHTML = '';
+
+        for (let i = 0; i < users.length; i++) {
+            
+            if (users[i].interests.includes(interests)) {
+                var userDiv = document.createElement('div');
+                userDiv.className = 'user';
+
+                var paragraph = document.createElement('p');
+                paragraph.innerHTML = 'Name: ' + users[i].name + '<br>' +
+                                'Username: ' + users[i].username + '<br>' +
+                                'Languages: ' + users[i].languages.join(', ') + '<br>' +
+                                'Interests: ' + users[i].interests.join(', ') + '<br>' +
+                                'Country: ' + users[i].country + '<br>' +
+                                'Age: ' + users[i].age;
+
+                // Add button to forward to route
+                var form = document.createElement('form');
+                form.action = '/findUser';
+                form.method = 'POST';
+
+                var userIdInput = document.createElement('input');
+                userIdInput.type = 'hidden';
+                userIdInput.name = 'userId';
+                userIdInput.value = String(users[i]._id);
+
+                var submitButton = document.createElement('button');
+                submitButton.type = 'submit';
+                submitButton.innerHTML = 'Find User';
+
+                form.appendChild(userIdInput);
+                form.appendChild(submitButton);
+
+                userDiv.appendChild(paragraph);
+                userDiv.appendChild(form);
+
+                userContainer.appendChild(userDiv);
+            }
+        }
+    }
+
+     </script>
+
+ {% endblock %}
