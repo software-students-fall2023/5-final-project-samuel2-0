@@ -467,8 +467,6 @@ def find_user():
         user_id_obj = ObjectId(user_id)
         user = db.users.find_one({'_id': user_id_obj})
 
-        print(user_id)
-
         if user:
             return render_template("friend_profile.html", user=user)
         else:
@@ -478,6 +476,69 @@ def find_user():
         print(e)
         return jsonify({'result': 'failed'})
     
+@app.route("/add_to_friends", methods=["POST"])
+def add_to_friends():
+    friend_id = request.form.get('friendId')
+
+    try:
+        friend_id_obj = ObjectId(friend_id)
+        friend = db.users.find_one({'_id': friend_id_obj})
+
+        user_id = ObjectId(session["userid"])
+        user = db.users.find_one({'_id': user_id})
+   
+        if user and friend:
+            if 'friends' not in user:
+                user['friends'] = [friend_id]
+                db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
+                print("Friend Added")
+            elif friend_id not in user['friends']:
+                user['friends'].append(friend_id)
+                db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
+                print("Friend Added")
+            else:
+                print("Already Friends")
+            
+            return render_template("friend_profile.html", user = friend)
+        else:
+            print ("User not found")
+    except:
+        print ("User not found")
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+# @app.route("/send_letter",  methods=['GET', 'POST'])
+# def send_letter():
+#     try:
+#         if "userid" in session:
+#             userid = session["userid"]
+#             user = get_user(userid)
+#             if request.method == "GET":
+#                 return render_template("send_letter.html", user=user)
+#             else:
+#                 sender_id = session["userid"]
+#                 receiver_id = request.form.get("receiver_id")
+#                 letter_text = request.form.get("letter_text")
+#                 sender = get_user(sender_id)
+#                 receiver = get_user(receiver_id)
+#                 print("sender and receiver",sender, receiver)
+
+#                 if sender and receiver:
+#                     new_letter = {
+#                         "sender_id": ObjectId(sender_id),
+#                         "receiver_id": ObjectId(receiver_id),
+#                         "letter_text": letter_text,
+#                         "timestamp": datetime.now(),
+#                     }
+#                     letters_collection.insert_one(new_letter)
+#                     return jsonify({"success": True, "letter": "Letter sent successfully"})
+#                 else:
+#                     return jsonify({"error": "Invalid sender or receiver"}), 400
+#         else:
+#             return jsonify({"error": "User not logged in"}), 401
+#     except Exception as e:
+#         print(f"Error sending letter: {e}")
+#         return jsonify({"error": str(e)}), 500
