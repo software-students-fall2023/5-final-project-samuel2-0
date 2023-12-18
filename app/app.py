@@ -419,8 +419,22 @@ def send_letter():
         if "userid" in session:
             userid = session["userid"]
             user = get_user(userid)
+
             if request.method == "GET":
-                return render_template("send_letter.html", user=user)
+
+                friends_array = []
+                if 'friends' in user:
+                    for friend_id_obj in user['friends']:
+                        try:
+                            friend = db.users.find_one({'_id': ObjectId(friend_id_obj)})
+                            if friend:
+                                friends_array.append(friend)
+                            else:
+                                print(f"Friend with ID {friend_id_obj} not found in the database.")
+                        except:
+                            print(f"Invalid friend ID: {friend_id_obj}")
+                
+                return render_template("send_letter.html", friends=friends_array)
             else:
                 sender_id = session["userid"]
                 receiver_id = request.form.get("receiver_id")
@@ -454,8 +468,23 @@ def my_friends():
     if "userid" in session:
         userid = session["userid"]
         user = get_user(userid)
+
         if user:
-            return render_template("my_friends.html", user=user)
+            friends_array = []
+            if 'friends' in user:
+        
+                for friend_id_obj in user['friends']:
+                    try:
+                        friend = db.users.find_one({'_id': ObjectId(friend_id_obj)})
+
+                        if friend:
+                            friends_array.append(friend)
+                        else:
+                            print(f"Friend with ID {friend_id_obj} not found in the database.")
+                    except:
+                        print(f"Invalid friend ID: {friend_id_obj}")
+                
+            return render_template("my_friends.html", friends = friends_array)
     else:
         return render_template("404.html", message="User not found. Log in first."), 404
 

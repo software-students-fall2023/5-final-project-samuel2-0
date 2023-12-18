@@ -4,9 +4,9 @@
   <h2>Your Friends</h2>
 
   <div id="friends-list">
-    {% if user.friends %}
+    {% if friends %}
       <ul>
-        {% for friend in user.friends %}
+        {% for friend in friends %}
           <li>{{ friend }}</li>
         {% endfor %}
       </ul>

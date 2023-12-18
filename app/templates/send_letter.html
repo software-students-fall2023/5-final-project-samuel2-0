@@ -4,12 +4,12 @@
 
 <h1>Compose Letter</h1>
 
-{% if user.friends %}
+{% if friends %}
     <form id="letterForm" method="post" action="{{ url_for('send_letter') }}">
         <div>
             <label for="to">To:</label>
             <select id="to" name="receiver_id" required>
-                {% for friend in user.friends %}
+                {% for friend in friends %}
                     <option value="{{ friend.id }}">{{ friend.username }}</option>
                 {% endfor %}
             </select>
@@ -25,3 +25,4 @@
 {% endif %}
 
 {% endblock %}
+
