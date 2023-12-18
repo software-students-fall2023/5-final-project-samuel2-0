@@ -1,8 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="utf-8">
     <title>Sign Up</title>
+    <style>
+        body {
+            background-color: rgba(255, 255, 255, 0.738);
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        h2 {
+          margin-top: 20px;
+            font-size: 72px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .signup-form {
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 20px;
+            color: #333;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+          font-family: 'Playfair Display', serif;
+            background-color: #5f1a19;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 24px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #219d54;
+        }
+    </style>
 </head>
 
 <body>
@@ -11,26 +79,26 @@
 
         <form action="/signup" method="post" class="signup-form">
             <div class="signup-form">
-                <label for="name">Enter your username: </label>
+                <label for="username">Username: </label>
                 <input type="text" name="username" id="username" required />
             </div>
 
             <div class="signup-form">
-                <label for="name">Enter your first name: </label>
+                <label for="first_name">First name: </label>
                 <input type="text" name="first_name" id="first_name" required />
             </div>
 
             <div class="signup-form">
-                <label for="name">Enter your last name: </label>
+                <label for="last_name">Last name: </label>
                 <input type="text" name="last_name" id="last_name" required />
             </div>
 
             <div class="signup-form">
-                <label for="email">Enter your email: </label>
+                <label for="email">Email: </label>
                 <input type="email" name="email" id="email" required />
             </div>
             <div class="signup-form">
-                <label for="password">Enter your password: </label>
+                <label for="password">Password: </label>
                 <input type="password" name="password" id="password" required />
             </div>
 
@@ -39,6 +107,7 @@
             </div>
         </form>
     </div>
+    <img src="../static/images/another_woman_writing.jpeg" alt="Woman Writing">
 </body>
 
 </html>

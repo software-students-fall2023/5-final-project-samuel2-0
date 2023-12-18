@@ -8,55 +8,97 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <style>
-        /* Add your custom styles for the navigation bar here */
-        body {
-            font-family: 'Roboto', sans-serif;
-        }
+       body,
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd,
+dt {
+    margin: 0;
+    padding: 0;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+body {
+    font-family: 'Playfair Display', serif;
+    background-color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0; 
+    border: none;
+}
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #4CAF50;
-            padding: 10px;
-            color: white;
-        }
+.container {
+    flex: 1;
+    width: 100%;
+    margin: 0 auto;
+}
 
-        nav {
-            display: flex;
-        }
+footer {
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    width:100%;
+    padding: 10px 0;
+    background-image: url("../static/images/trying4.jpeg"); /* Fix: Added 'url()' */
+    color: #ecf0f1;
+}
 
-        nav a {
-            margin-right: 15px;
-            color: white;
-            text-decoration: none;
-        }
+header {
+    display: flex;
+    background-image: url("../static/images/trying4.jpeg"); /* Fix: Added 'url()' */
+    justify-content: space-between;
+    align-items: center;
+    color: #ecf0f1;
+    padding: 10px 20px;
+}
 
-        main {
-            padding: 20px;
-        }
+header h1 {
+    font-size: 2em;
+    margin-right: 20px; 
+}
 
-        footer {
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
+nav {
+    display: flex;
+}
+
+main{
+    flex: 1;
+    padding: 20px;
+    outline: none; 
+}
+
+nav a {
+    color: #ecf0f1;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 1.2em;
+}
+
+@media only screen and (max-width: 768px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    nav a {
+        font-size: 1em;
+    }
+}
     </style>
 </head>
 
 <body>
     <div class="container">
         <header>
-            <h1>Letterbox App</h1>
+            <h1>Letterbox</h1>
             <nav>
                 <a href="{{ url_for('inbox')}}">Inbox</a>
                 <a href="{{ url_for('send_letter')}}">Compose</a>
