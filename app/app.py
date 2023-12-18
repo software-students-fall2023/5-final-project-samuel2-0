@@ -566,36 +566,3 @@ def add_to_friends():
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
 
-
-# @app.route("/send_letter",  methods=['GET', 'POST'])
-# def send_letter():
-#     try:
-#         if "userid" in session:
-#             userid = session["userid"]
-#             user = get_user(userid)
-#             if request.method == "GET":
-#                 return render_template("send_letter.html", user=user)
-#             else:
-#                 sender_id = session["userid"]
-#                 receiver_id = request.form.get("receiver_id")
-#                 letter_text = request.form.get("letter_text")
-#                 sender = get_user(sender_id)
-#                 receiver = get_user(receiver_id)
-#                 print("sender and receiver",sender, receiver)
-
-#                 if sender and receiver:
-#                     new_letter = {
-#                         "sender_id": ObjectId(sender_id),
-#                         "receiver_id": ObjectId(receiver_id),
-#                         "letter_text": letter_text,
-#                         "timestamp": datetime.now(),
-#                     }
-#                     letters_collection.insert_one(new_letter)
-#                     return jsonify({"success": True, "letter": "Letter sent successfully"})
-#                 else:
-#                     return jsonify({"error": "Invalid sender or receiver"}), 400
-#         else:
-#             return jsonify({"error": "User not logged in"}), 401
-#     except Exception as e:
-#         print(f"Error sending letter: {e}")
-#         return jsonify({"error": str(e)}), 500
