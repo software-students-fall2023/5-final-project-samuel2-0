@@ -489,11 +489,11 @@ def add_to_friends():
    
         if user and friend:
             if 'friends' not in user:
-                user['friends'] = [friend]
+                user['friends'] = [friend_id]
                 db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
                 print("Friend Added")
-            elif friend not in user['friends']:
-                user['friends'].append(friend)
+            elif friend_id not in user['friends']:
+                user['friends'].append(friend_id)
                 db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
                 print("Friend Added")
             else:
