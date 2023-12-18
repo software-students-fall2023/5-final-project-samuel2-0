@@ -27,14 +27,17 @@ def get_user(user_id):
     print(users_collection.find_one({"_id": ObjectId(user_id)}))
     return users_collection.find_one({"_id": ObjectId(user_id)})
 
+
 def get_all_users():
     return users_collection.find()
+
 
 @app.route("/")
 def welcome():
     if "userid" in session:
         return render_template("index.html", name=session["username"])
     return render_template("index.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -129,65 +132,72 @@ def logout():
     return redirect(url_for("welcome"))
 
 
-@app.route("/inbox", methods = ["GET"])
+@app.route("/inbox", methods=["GET"])
 def inbox():
-    """
-    
-    """
     if "userid" in session:
         userid = session["userid"]
-        user = users_collection.find_one({"_id":ObjectId(userid)})
+        user = users_collection.find_one({"_id": ObjectId(userid)})
         print(user)
 
         if user:
-            print("is user printintg",(userid))
-            #find all the letters whose receipients == current logged in user
-            letters = letters_collection.find({"receiver_id":ObjectId(userid)}).sort("timestamp",-1)
-            
-            
-           
+            print("is user printintg", (userid))
+            # find all the letters whose receipients == current logged in user
+            letters = letters_collection.find({"receiver_id": ObjectId(userid)}).sort(
+                "timestamp", -1
+            )
+
             return render_template("inbox.html", user=user, letters=letters)
     return redirect(url_for("login"))
 
-@app.route("/inbox/<letter_id>", methods = ["POST"])
+
+@app.route("/inbox/<letter_id>", methods=["POST"])
 def remove_letter(letter_id):
-   
     if "userid" in session:
         userid = session["userid"]
-        user = users_collection.find_one({"_id":ObjectId(userid)})
+        user = users_collection.find_one({"_id": ObjectId(userid)})
         print(user)
 
         if user:
-            letterToDelete = letters_collection.find_one({"_id":ObjectId(letter_id)})
+            letterToDelete = letters_collection.find_one({"_id": ObjectId(letter_id)})
             letterToDeleteId = letterToDelete["_id"]
-            letters_collection.delete_one({"_id":letterToDeleteId})
+            letters_collection.delete_one({"_id": letterToDeleteId})
             return redirect(url_for("inbox"))
 
-            
     return redirect(url_for("welcome"))
 
 
+@app.route("/read_letter/<letter_id>", methods=["GET"])
+def read_letter(letter_id):
+    if "userid" in session:
+        userid = session["userid"]
+        user = users_collection.find_one({"_id": ObjectId(userid)})
+        print(letter_id, "is None ??")
+        letter = letters_collection.find_one({"_id": ObjectId(letter_id)})
+       
+        if user and letter:
+            print("user and letter both exist")
+            print("in read letter function : ", user, letter)
+            return render_template("reading.html", user=user, letter=letter)
+    return redirect(url_for("login"))
 
 
 @app.route("/fakeALetter")
 def fake_letter():
     sender_id = "657be1c210f97adccd73219b"
     receiver_id = "657cfca3d111878b03b0e4da"
-    sender_name = users_collection.find_one({"_id":ObjectId(sender_id)})["username"]
-    
+    sender_name = users_collection.find_one({"_id": ObjectId(sender_id)})["username"]
 
     new_letter = {
-            "sender_id": ObjectId(sender_id),
-            "sender_name":sender_name,
-            "receiver_id": ObjectId(receiver_id),
-            "header": "Holy Holy Holy",
-            "letter_text": "Hi God bless!",
-            "timestamp": datetime.now(),
-        }
+        "sender_id": ObjectId(sender_id),
+        "sender_name": sender_name,
+        "receiver_id": ObjectId(receiver_id),
+        "header": "Holy Holy",
+        "letter_text": "Hi God bless! <p>Holy Holy Holy,Holy Holy Holy,Holy Holy Holy\n,Holy Holy Holy,Holy Holy Holy</p>",
+        "timestamp": datetime.now(),
+    }
     letters_collection.insert_one(new_letter)
     print("successfully faked a letter")
     return redirect(url_for("login"))
-
 
 
 @app.route("/personal_info", methods=["GET", "POST"])
@@ -225,24 +235,30 @@ def personal_info():
 
 @app.route("/profile", methods=["GET"])
 def myprofile():
-     if "userid" in session:
+    if "userid" in session:
         userid = session["userid"]
         user = get_user(userid)
         if user:
             return render_template("profile.html", user=user)
         else:
-            return render_template("404.html", message="User not found. Log in first."), 404
+            return (
+                render_template("404.html", message="User not found. Log in first."),
+                404,
+            )
 
 
 @app.route("/profile/edit_profile", methods=["GET"])
 def edit_profile(user_id):
-   if "userid" in session:
+    if "userid" in session:
         userid = session["userid"]
         user = get_user(userid)
         if user:
             return render_template("edit_profile.html", user=user)
         else:
-            return render_template("404.html", message="User not found. Log in first."), 404
+            return (
+                render_template("404.html", message="User not found. Log in first."),
+                404,
+            )
 
 
 @app.route("/profile/edit_profile", methods=["POST"])
@@ -278,6 +294,7 @@ def update_profile():
     else:
         return "User not found. Log in first.", 404
 
+
 @app.route("/profile/edit_interests", methods=["GET"])
 def edit_interests():
     if "userid" in session:
@@ -286,7 +303,10 @@ def edit_interests():
         if user:
             return render_template("edit_interests.html", user=user)
         else:
-            return render_template("404.html", message="User not found. Log in first."), 404
+            return (
+                render_template("404.html", message="User not found. Log in first."),
+                404,
+            )
 
 
 @app.route("/profile/edit_interests", methods=["POST"])
@@ -351,10 +371,12 @@ def update_about():
         if user:
             user["about_me"] = request.form["about"]
             users_collection.update_one(
-                {"_id": user["_id"]}, {"$set": {"about_me": request.form["about"]}})
+                {"_id": user["_id"]}, {"$set": {"about_me": request.form["about"]}}
+            )
             return render_template("profile.html", user=user)
     else:
         return render_template("404.html", message="User not found. Log in first."), 404
+
 
 @app.route("/pal_profile", methods=["GET"])
 def pal_profile():
@@ -366,7 +388,7 @@ def pal_profile():
             print("frend _ id", friend_id)
             return render_template("friend_profile.html", user_id=friend_id)
     else:
-       return render_template("404.html", message="User not found. Log in first."), 404
+        return render_template("404.html", message="User not found. Log in first."), 404
 
 @app.route("/pal_profile", methods=["POST"])
 def see_friend():
@@ -386,7 +408,7 @@ def see_friend():
         return jsonify({"error": str(e)}), 400
 
 
-@app.route("/send_letter",  methods=['GET', 'POST'])
+@app.route("/send_letter", methods=["GET", "POST"])
 def send_letter():
     try:
         if "userid" in session:
@@ -400,7 +422,7 @@ def send_letter():
                 letter_text = request.form.get("letter_text")
                 sender = get_user(sender_id)
                 receiver = get_user(receiver_id)
-                print("sender and receiver",sender, receiver)
+                print("sender and receiver", sender, receiver)
 
                 if sender and receiver:
                     new_letter = {
@@ -410,7 +432,9 @@ def send_letter():
                         "timestamp": datetime.now(),
                     }
                     letters_collection.insert_one(new_letter)
-                    return jsonify({"success": True, "letter": "Letter sent successfully"})
+                    return jsonify(
+                        {"success": True, "letter": "Letter sent successfully"}
+                    )
                 else:
                     return jsonify({"error": "Invalid sender or receiver"}), 400
         else:
@@ -418,6 +442,7 @@ def send_letter():
     except Exception as e:
         print(f"Error sending letter: {e}")
         return jsonify({"error": str(e)}), 500
+
 
 @app.route("/my_friends", methods=["GET"])
 def my_friends():
@@ -429,6 +454,7 @@ def my_friends():
     else:
         return render_template("404.html", message="User not found. Log in first."), 404
 
+
 @app.route("/find_friends", methods=["GET"])
 def find_friends():
     if "userid" in session:
@@ -439,6 +465,7 @@ def find_friends():
             return render_template("find_friends.html")
     else:
         return render_template("404.html", message="User not found. Log in first."), 404
+
 
 ### SAMUEL'S STUFF - DO NOT TOUCH!
 
@@ -462,8 +489,6 @@ def find_user():
         user_id_obj = ObjectId(user_id)
         user = db.users.find_one({'_id': user_id_obj})
 
-        print(user_id)
-
         if user:
             return render_template("friend_profile.html", user=user)
         else:
@@ -473,6 +498,70 @@ def find_user():
         print(e)
         return jsonify({'result': 'failed'})
     
+@app.route("/add_to_friends", methods=["POST"])
+def add_to_friends():
+    friend_id = request.form.get('friendId')
+
+    try:
+        friend_id_obj = ObjectId(friend_id)
+        friend = db.users.find_one({'_id': friend_id_obj})
+
+        user_id = ObjectId(session["userid"])
+        user = db.users.find_one({'_id': user_id})
+   
+        if user and friend:
+            if 'friends' not in user:
+                user['friends'] = [friend_id]
+                db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
+                print("Friend Added")
+            elif friend_id not in user['friends']:
+                user['friends'].append(friend_id)
+                db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
+                print("Friend Added")
+            else:
+                print("Already Friends")
+            
+            return render_template("friend_profile.html", user = friend)
+        else:
+            print ("User not found")
+    except:
+        print ("User not found")
+    
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+# @app.route("/send_letter",  methods=['GET', 'POST'])
+# def send_letter():
+#     try:
+#         if "userid" in session:
+#             userid = session["userid"]
+#             user = get_user(userid)
+#             if request.method == "GET":
+#                 return render_template("send_letter.html", user=user)
+#             else:
+#                 sender_id = session["userid"]
+#                 receiver_id = request.form.get("receiver_id")
+#                 letter_text = request.form.get("letter_text")
+#                 sender = get_user(sender_id)
+#                 receiver = get_user(receiver_id)
+#                 print("sender and receiver",sender, receiver)
+
+#                 if sender and receiver:
+#                     new_letter = {
+#                         "sender_id": ObjectId(sender_id),
+#                         "receiver_id": ObjectId(receiver_id),
+#                         "letter_text": letter_text,
+#                         "timestamp": datetime.now(),
+#                     }
+#                     letters_collection.insert_one(new_letter)
+#                     return jsonify({"success": True, "letter": "Letter sent successfully"})
+#                 else:
+#                     return jsonify({"error": "Invalid sender or receiver"}), 400
+#         else:
+#             return jsonify({"error": "User not logged in"}), 401
+#     except Exception as e:
+#         print(f"Error sending letter: {e}")
+#         return jsonify({"error": str(e)}), 500
