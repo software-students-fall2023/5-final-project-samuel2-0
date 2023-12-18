@@ -57,3 +57,42 @@ main{
   }
   
 
+  .friend {
+    position: relative;
+    width: 150px;
+    height: 100px;
+    border: 1px solid #ddd;
+    background-color: #f5f5f5;
+    margin: 10px;
+    box-sizing: border-box;
+    padding: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease; 
+  }
+  
+  .friend:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  }
+  
+  .friend button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: block;
+    width: 100px; 
+    padding: 10px;
+    background-color: #4CAF50; 
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+  }
+  
+  .friend button:hover {
+    background-color: #45a049; 
+  }
