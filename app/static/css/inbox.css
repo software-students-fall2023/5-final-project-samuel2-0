@@ -1,0 +1,35 @@
+
+.inbox-container {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+   
+  }
+
+
+  .content1{
+    /* border:1px solid black; */
+    width: 50%; 
+
+  }
+
+  .content2{
+    /* border:1px solid black; */
+    width: 100%; 
+    margin-left:150px;
+
+  }
+
+  .content3{
+    /* border:1px solid black; */
+    width: 35%; 
+    margin-left:200px;
+  }
+
+  .btn {
+    margin-top: 5px;
+  }
+
