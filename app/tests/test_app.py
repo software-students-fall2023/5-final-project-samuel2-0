@@ -329,7 +329,6 @@ def test_update_profile(client, monkeypatch):
 
     assert response.status_code == 200
 
-
 def test_edit_interests(client, monkeypatch):
     with client.session_transaction() as session:
         session["userid"] = str(ObjectId())
