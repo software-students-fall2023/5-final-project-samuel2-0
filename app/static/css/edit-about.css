@@ -1,0 +1,56 @@
+.edit-about-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.edit-about-form-heading {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.edit-about-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-about-form-group {
+  margin-bottom: 15px;
+}
+
+.edit-about-form-label {
+  font-weight: bold;
+}
+
+.edit-about-form-input {
+  font-family: "Playfair Display", serif;
+  font-size:20px;
+  width: 100%;
+  padding: 15px; /* Increase padding for a larger input box */
+  height: 300px;
+  resize: none;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-about-btn {
+  padding: 15px; /* Increase padding for a larger button */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-about-btn-primary {
+  background-color: #622121;
+  color: #fff;
+}
+
+.edit-about-btn-primary:hover {
+  background-color: #450909;
+}

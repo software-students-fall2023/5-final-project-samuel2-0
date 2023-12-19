@@ -1,0 +1,71 @@
+/* Friend profile page styling */
+.friend-container {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 8px;
+  }
+  
+  .friend-h1 {
+    text-align: left;
+    margin-bottom: 20px;
+    flex-basis: 100%;
+  }
+  
+  .friend-h2 {
+    margin-bottom: 10px;
+    font-size: 36px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .friend-h3 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #622121;
+  }
+  
+  .friend-p {
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #000000;
+  }
+  
+  .friend-ul {
+    list-style-type: none;
+    padding: 0;
+    font-size: 20px;
+    margin: 10px 0;
+  }
+  
+  .friend-li {
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: #555;
+  }
+  
+  
+  button {
+    background-color: #622121;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #450909;
+  }
+  

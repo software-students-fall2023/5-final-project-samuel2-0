@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block container %}
-  <h2>Edit Interests</h2>
+
   <form method="post" action="{{ url_for('edit_interests', user_id=user._id) }}" id="interests-form">
+    <h2 class="interests-heading">Edit Interests</h2>
     <div id="interests-container">
       {% for interest in user.interests %}
         <div class="interest-box">

@@ -4,8 +4,54 @@
     <title>Letterbox App</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
+      href="{{ url_for('static', filename='css/find-friends.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/inbox.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/profile.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit-profile.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit-about.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit-interests.css') }}"
+    />
+
+
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit-languages.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/friend-profile.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/my-friends.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/send-letter.css') }}"
+    />
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -113,6 +159,7 @@
           <a href="{{ url_for('my_friends')}}">Pals</a>
           <a href="{{ url_for('find_friends')}}">Find Pals</a>
           <a href="{{ url_for('myprofile')}}">Profile</a>
+          <a href="{{ url_for('logout')}}">Logout</a>
         </nav>
       </header>
       <main>{% block container %} {% endblock %}</main>
