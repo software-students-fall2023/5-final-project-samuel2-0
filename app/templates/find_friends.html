@@ -3,27 +3,50 @@
  {%block container %}
 
     <body class="letterbox"> 
-
         <form>
-            <label for="languageSelect">Select Language:</label>
-            <select id="languageSelect" name="language">
+            <label class = "filter-label" for="languageSelect">Select Language:</label>
+            <select class="filter-select" id="languageSelect" name="language">
                 <option value="English">English</option>
                 <option value="Dutch">Dutch</option>
                 <option value="German">German</option>
                 <option value="French">French</option>
                 <option value="Slovak">Slovak</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Italian">Italian</option>
+                <option value="Portuguese">Portuguese</option>
+                <option value="Russian">Russian</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Korean">Korean</option>
+                <option value="Arabic">Arabic</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Bengali">Bengali</option>
+                <option value="Turkish">Turkish</option>
+                <option value="Swedish">Swedish</option>
+                <option value="Greek">Greek</option>
+                <option value="Hebrew">Hebrew</option>
+                <option value="Polish">Polish</option>
+                <option value="Czech">Czech</option>
+                <option value="Danish">Danish</option>
+                <option value="Finnish">Finnish</option>
+                <option value="Norwegian">Norwegian</option>
+                <option value="Romanian">Romanian</option>
+                <option value="Dari">Dari</option>
+                <option value="Swahili">Swahili</option>
+                <option value="Tagalog">Tagalog</option>
+                <option value="Thai">Thai</option>
+                <option value="Vietnamese">Vietnamese</option>
             </select>
-            <button type="button" onclick="filter_lang()">Filter Users</button>
+            <button class="lang-button-filter" type="button" onclick="filter_lang()">Filter Users</button>
         </form>
         
         <form>
-            <label for="interestInput">Enter Interests:</label>
-            <input type="text" id="interestInput" name="interests">
-            <button type="button" onclick="filter_interest()">Filter Users</button>
+            <label class = "filter-label" for="interestInput">Enter Interests:</label>
+            <input class= "filter-input" type="text" id="interestInput" name="interests">
+            <button class="interest-button-filter" type="button" onclick="filter_interest()">Filter Users</button>
         </form>
-       
 
-        <button type="button" onclick="display_all()">Reset</button>
+        <button class="reset-button" type="button" onclick="display_all()">Reset</button>
 
         <div id="allLetters"> 
             <div id="user_container">
@@ -74,7 +97,6 @@
                                   'Country: ' + users[i].country + '<br>' +
                                   'Age: ' + users[i].age;
 
-                //Add button to forward to route
                 var form = document.createElement('form');
                 form.action = '/findUser';
                 form.method = 'POST'; 
@@ -86,7 +108,7 @@
 
                 var submitButton = document.createElement('button');
                 submitButton.type = 'submit';
-                submitButton.innerHTML = 'Find User';
+                submitButton.innerHTML = 'Profile';
 
                 form.appendChild(userIdInput);
                 form.appendChild(submitButton);
@@ -117,7 +139,6 @@
                                   'Country: ' + users[i].country + '<br>' +
                                   'Age: ' + users[i].age;
 
-                    // Add button to forward to route
                     var form = document.createElement('form');
                     form.action = '/findUser';
                     form.method = 'POST';
@@ -150,7 +171,6 @@
         userContainer.innerHTML = '';
 
         for (let i = 0; i < users.length; i++) {
-            
             if (users[i].interests.includes(interests)) {
                 var userDiv = document.createElement('div');
                 userDiv.className = 'user';
@@ -162,8 +182,6 @@
                                 'Interests: ' + users[i].interests.join(', ') + '<br>' +
                                 'Country: ' + users[i].country + '<br>' +
                                 'Age: ' + users[i].age;
-
-                // Add button to forward to route
                 var form = document.createElement('form');
                 form.action = '/findUser';
                 form.method = 'POST';
@@ -175,7 +193,7 @@
 
                 var submitButton = document.createElement('button');
                 submitButton.type = 'submit';
-                submitButton.innerHTML = 'Find User';
+                submitButton.innerHTML = 'Profile';
 
                 form.appendChild(userIdInput);
                 form.appendChild(submitButton);

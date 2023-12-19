@@ -1,127 +1,45 @@
 {% extends 'base.html' %}
+
 {% block container %}
-<style>
-  body {
-    margin: 0;
-    font-family: 'Playfair Display', serif;
-    background-color: #f0f0f0; 
-  }
 
-  .profile-container {
-    margin: 20px auto; 
-    padding: 20px;
-    max-width: 800px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    display: flex; 
-    flex-wrap: wrap; 
-    border-radius: 8px;
-  }
-
-  .profile-header {
-    text-align: left;
-    margin-bottom: 20px;
-    flex-basis: 100%;
-  }
-
-  .user-fields {
-    margin-bottom: 20px;
-    flex-basis: 100%; 
-  }
-
-  .editBtn {
-    background-color: #622121;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-
-  .editBtn:hover {
-    background-color: #450909;
-  }
-
-  .profile-section {
-    margin-bottom: 30px;
-    flex-basis: calc(50% - 20px); 
-  }
-
-  h2 {
-    margin-bottom: 10px;
-    font-size: 36px;
-    color: #333;
-  }
-
-  h3 {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    font-size: 24px;
-    color: #622121;
-  }
-
-  p {
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 15px;
-    color: #555;
-  }
-  
-  ul {
-    list-style-type: none; 
-    padding: 0; 
-    margin: 10px 0;
-  }
-
-  li {
-    margin-bottom: 5px;
-    color: #555;
-  }
-</style>
-
-
+<body>
   <div class="profile-container">
 
     <div class="user-fields">
-      <h2>{{ user.username }}</h2>
-      <p ><strong>Name:</strong>  {{ user.name }}</p>
-      <p ><strong>Age:</strong>  {{ user.age }}</p>
-      <p><strong>Country:</strong> {{ user.country }}</p>
+      <h2 class="profile-h2">{{ user.username }}</h2>
+      <p class="profile-section-p"><strong>Name:</strong>  {{ user.name }}</p>
+      <p class="profile-section-p"><strong>Age:</strong>  {{ user.age }}</p>
+      <p class="profile-section-p"><strong>Country:</strong> {{ user.country }}</p>
     </div>
     <div class="profile-header">
-      <a href="{{ url_for('edit_profile', user_id=user._id) }}" class="editBtn">Edit Profile</a>
+      <a href="{{ url_for('edit_profile', user_id=user._id) }}" class="profile-editBtn">Edit Profile</a>
     </div>
 
     <div class="profile-section" id="aboutMeSection">
-      <h3>About Me</h3>
-      <p>{{ user.about_me }}</p>
-      <a href="{{ url_for('edit_about', user_id=user._id) }}" class="editBtn">Edit About</a>
+      <h3 class="profile-h3">About Me</h3>
+      <p class="profile-p">{{ user.about_me }}</p>
+      <a href="{{ url_for('edit_about', user_id=user._id) }}" class="profile-editBtn">Edit About</a>
     </div>
 
     <div class="profile-section" id="languagesSection">
-      <h3>Languages</h3>
-      <ul>
+      <h3 class="profile-h3">Languages</h3>
+      <ul class="profile-ul">
         {% for language in user.languages %}
-          <li>{{ language }}</li>
+          <li class="profile-ul">{{ language }}</li>
         {% endfor %}
       </ul>
-      <a href="{{ url_for('edit_languages', user_id=user._id) }}" class="editBtn">Edit Languages</a>
+      <a href="{{ url_for('edit_languages', user_id=user._id) }}" class="profile-editBtn">Edit Languages</a>
     </div>
 
     <div class="profile-section" id="interestsSection">
-      <h3>Interests</h3>
-      <ul>
+      <h3 class="profile-h3">Interests</h3>
+      <ul class="profile-ul">
         {% for interest in user.interests %}
-          <li>{{ interest }}</li>
+          <li class="profile-ul">{{ interest }}</li>
         {% endfor %}
       </ul>
-      <a href="{{ url_for('edit_interests', user_id=user._id) }}" class="editBtn">Edit Interests</a>
+      <a href="{{ url_for('edit_interests', user_id=user._id) }}" class="profile-editBtn">Edit Interests</a>
     </div>
   </div>
+</body>
 {% endblock %}

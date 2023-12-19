@@ -2,24 +2,25 @@
 
 {% block container %}
 
-<h1>Compose Letter</h1>
+<h1 class = "send-letter-h1">Compose Letter</h1>
 
 {% if friends %}
-    <form id="letterForm" method="post" action="{{ url_for('send_letter') }}">
+    <form class="send-letter-form" id="letterForm" method="post" action="{{ url_for('send_letter') }}">
         <div>
-            <label for="to">To:</label>
-            <select id="to" name="receiver_id" required>
+            <label class="send-letter-label" for="to">To:</label>
+            <select class="send-letter-select" id="to" name="receiver_id" required>
                 {% for friend in friends %}
                     <option value="{{ friend.id }}">{{ friend.username }}</option>
                 {% endfor %}
             </select>
         </div>
         <div>
-            <label for="letter">Letter:</label>
+            <label class="send-letter-label" for="letter">Letter:</label>
             <textarea id="letter" name="letter_text" rows="4" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Send</button>
+        <button type="submit" id="send-letter-btn">Send</button>
     </form>
+    
 {% else %}
     <p>Find a pal to send a letter!</p>
 {% endif %}
