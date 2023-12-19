@@ -213,8 +213,8 @@ def personal_info():
                 country = request.form["country"]
                 about_me = request.form["about_me"]
                 age = request.form["age"]
-                languages = request.form.getlist("languages[]")
-                interests = request.form.getlist("interests[]")
+                languages = request.form.getlist("languages")
+                interests = request.form.getlist("interests")
                 users_collection.update_one(
                     {"_id": ObjectId(user.get("_id"))},
                     {
@@ -488,15 +488,14 @@ def find_user():
         user_id = request.form.get('userId')
         user_id_obj = ObjectId(user_id)
         user = db.users.find_one({'_id': user_id_obj})
-
         if user:
             return render_template("friend_profile.html", user=user)
         else:
             return jsonify({'result': 'Failed, but tried'})
-
     except Exception as e:
         print(e)
         return jsonify({'result': 'failed'})
+    
     
 @app.route("/add_to_friends", methods=["POST"])
 def add_to_friends():
