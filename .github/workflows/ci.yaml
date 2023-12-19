@@ -18,6 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
             python -m pip install --upgrade pip
+            python -m pip install --upgrade pipenv setuptools
             pip install --user pipenv
             pipenv --python ${{ matrix.python-version }}
             pipenv install pytest pytest-flask pymongo flask-cors
