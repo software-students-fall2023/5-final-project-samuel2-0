@@ -442,34 +442,28 @@ def send_letter():
 
 @app.route("/my_friends", methods=["GET"])
 def my_friends():
-    try:
-        if "userid" in session:
-            userid = session["userid"]
-            user = get_user(userid)
+    if "userid" in session:
+        userid = session["userid"]
+        user = get_user(userid)
 
-            if user:
-                friends_array = []
-                if "friends" in user:
-                    for friend_id_obj in user["friends"]:
-                        try:
-                            friend = db.users.find_one({"_id": ObjectId(friend_id_obj)})
-                            if friend:
-                                friends_array.append(friend)
-                            else:
-                                print(
-                                    f"Friend with ID {friend_id_obj} not found in the database."
-                                )
-                        except Exception as e:
-                            print(
-                                f"Error processing friend with ID {friend_id_obj}: {e}"
-                            )
-                    return jsonify({"friends": friends_array})
-                else:
-                    return jsonify({"error": "No friends found for the user."}), 404
-        else:
-            return jsonify({"error": "User not found. Log in first."}), 404
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        if user:
+            friends_array = []
+            if 'friends' in user:
+        
+                for friend_id_obj in user['friends']:
+                    try:
+                        friend = db.users.find_one({'_id': ObjectId(friend_id_obj)})
+
+                        if friend:
+                            friends_array.append(friend)
+                        else:
+                            print(f"Friend with ID {friend_id_obj} not found in the database.")
+                    except:
+                        print(f"Invalid friend ID: {friend_id_obj}")
+                
+            return render_template("my_friends.html", friends = friends_array)
+    else:
+        return render_template("404.html", message="User not found. Log in first."), 404
 
 
 @app.route("/find_friends", methods=["GET"])
