@@ -15,6 +15,7 @@ from mongomock import MongoClient
 
 @pytest.fixture
 def client():
+
     app.config['TESTING'] = True
     with app.test_client() as client:
         with app.app_context():
@@ -188,7 +189,5 @@ def test_login_user_not_found(client, monkeypatch):
     assert response_data['error'] == 'User not found'
 
 
-    
-
-
+   
 

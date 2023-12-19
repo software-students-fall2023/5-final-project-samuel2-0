@@ -34,6 +34,9 @@ def get_all_users():
 
 @app.route("/")
 def welcome():
+    """
+    landing page : if user is logged in, display a welcome page
+    """
     if "userid" in session:
         return render_template("index.html", name=session["username"])
     return render_template("index.html")
@@ -81,7 +84,6 @@ def signup():
     """
     Sign up method for new users
     """
-
     if request.method == "POST":
         username = request.form["username"]
         email = request.form["email"]
@@ -124,6 +126,9 @@ def signup():
 
 @app.route("/logout")
 def logout():
+    """
+    Allows a user to log out of current account
+    """
     if "userid" in session:
         session.pop("userid", None)
         session.pop("email", None)
@@ -134,6 +139,9 @@ def logout():
 
 @app.route("/inbox", methods=["GET"])
 def inbox():
+    """
+    If a user is logged in, then the user can see letters received from others
+    """
     if "userid" in session:
         userid = session["userid"]
         user = users_collection.find_one({"_id": ObjectId(userid)})
@@ -152,6 +160,9 @@ def inbox():
 
 @app.route("/inbox/<letter_id>", methods=["POST"])
 def remove_letter(letter_id):
+    """
+    A logged in user can delete a letter received from others.
+    """
     if "userid" in session:
         userid = session["userid"]
         user = users_collection.find_one({"_id": ObjectId(userid)})
@@ -168,6 +179,9 @@ def remove_letter(letter_id):
 
 @app.route("/read_letter/<letter_id>", methods=["GET"])
 def read_letter(letter_id):
+    """
+    A logged in user can click on a corresponding letter and read 
+    """
     if "userid" in session:
         userid = session["userid"]
         user = users_collection.find_one({"_id": ObjectId(userid)})
@@ -192,7 +206,7 @@ def fake_letter():
         "sender_name": sender_name,
         "receiver_id": ObjectId(receiver_id),
         "header": "Holy Holy",
-        "letter_text": "Hi God bless! <p>Holy Holy Holy,Holy Holy Holy,Holy Holy Holy\n,Holy Holy Holy,Holy Holy Holy</p>",
+        "letter_text": "Hi God bless!Holy Holy Holy,Holy Holy Holy,Holy Holy Holy\n,Holy Holy Holy,Holy Holy Holy</p>",
         "timestamp": datetime.now(),
     }
     letters_collection.insert_one(new_letter)
@@ -202,6 +216,9 @@ def fake_letter():
 
 @app.route("/personal_info", methods=["GET", "POST"])
 def personal_info():
+    """
+    A logged in user can add personalized information about themselves
+    """
     if "userid" in session:
         userid = session["userid"]
         user = users_collection.find_one({"_id": ObjectId(userid)})
@@ -235,6 +252,9 @@ def personal_info():
 
 @app.route("/profile", methods=["GET"])
 def myprofile():
+    """
+    personal profile information for the logged in user 
+    """
     if "userid" in session:
         userid = session["userid"]
         user = get_user(userid)
@@ -245,6 +265,7 @@ def myprofile():
                 render_template("404.html", message="User not found. Log in first."),
                 404,
             )
+    return redirect(url_for("login"))
 
 @app.route("/profile/edit_profile", methods=["GET"])
 def edit_profile():
@@ -258,6 +279,7 @@ def edit_profile():
                 render_template("404.html", message="User not found. Log in first."),
                 404,
             )
+    return redirect(url_for("login"))
 
 
 @app.route("/profile/edit_profile", methods=["POST"])
@@ -377,35 +399,6 @@ def update_about():
         return render_template("404.html", message="User not found. Log in first."), 404
 
 
-@app.route("/pal_profile", methods=["GET"])
-def pal_profile():
-    if "userid" in session:
-        userid = session["userid"]
-        user = get_user(userid)
-        if user:
-            friend_id = request.form.get("user_id")
-            print("frend _ id", friend_id)
-            return render_template("friend_profile.html", user_id=friend_id)
-    else:
-        return render_template("404.html", message="User not found. Log in first."), 404
-
-@app.route("/pal_profile", methods=["POST"])
-def see_friend():
-    try:
-        user_id = session["userid"]
-        user = get_user(user_id)
-        if user:
-            friend_id = request.form.get("friend_id")
-            if friend_id:
-                return render_template("friend_profile.html", user=friend_id)
-            else:
-                raise ValueError("Friend ID not provided in the form data.")
-        else:
-            return "User not found. Log in first.", 404
-    except Exception as e:
-        print(f"Error adding friend: {e}")
-        return jsonify({"error": str(e)}), 400
-
 
 @app.route("/send_letter", methods=["GET", "POST"])
 def send_letter():
@@ -415,12 +408,13 @@ def send_letter():
             user = get_user(userid)
 
             if request.method == "GET":
-
+                
                 friends_array = []
                 if 'friends' in user:
                     for friend_id_obj in user['friends']:
                         try:
                             friend = db.users.find_one({'_id': ObjectId(friend_id_obj)})
+                           
                             if friend:
                                 friends_array.append(friend)
                             else:
@@ -429,25 +423,29 @@ def send_letter():
                             print(f"Invalid friend ID: {friend_id_obj}")
                 
                 return render_template("send_letter.html", friends=friends_array)
-            else:
+            elif request.method == "POST":
                 sender_id = session["userid"]
+                
                 receiver_id = request.form.get("receiver_id")
+ 
                 letter_text = request.form.get("letter_text")
+                header = request.form.get("header")
                 sender = get_user(sender_id)
+                sender_name = sender["username"]
                 receiver = get_user(receiver_id)
-                print("sender and receiver", sender, receiver)
-
+                
                 if sender and receiver:
                     new_letter = {
                         "sender_id": ObjectId(sender_id),
+                        "sender_name":sender_name,
                         "receiver_id": ObjectId(receiver_id),
+                        "header":header,
                         "letter_text": letter_text,
                         "timestamp": datetime.now(),
                     }
                     letters_collection.insert_one(new_letter)
-                    return jsonify(
-                        {"success": True, "letter": "Letter sent successfully"}
-                    )
+                  
+                    return redirect(url_for("inbox"))
                 else:
                     return jsonify({"error": "Invalid sender or receiver"}), 400
         else:
@@ -540,6 +538,7 @@ def add_to_friends():
         user_id = ObjectId(session["userid"])
         user = db.users.find_one({'_id': user_id})
         if user and friend:
+            # add friend to my friend's list 
             if 'friends' not in user:
                 user['friends'] = [friend_id]
                 db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
@@ -548,6 +547,22 @@ def add_to_friends():
                 db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
             else:
                 print("Already Friends")
+
+            #add me to friend's list 
+            if 'friends' not in friend: #if friend does not have 'friends' as a field
+                friend['friends'] = [user_id]
+                db.users.update_one({"_id":friend_id}, {'$set': {'friends': friend['friends']}})
+                print("I am added to their friends list")
+            elif str(user_id) not in friend['friends']:
+                
+                friend['friends'].append(str(user_id))
+               
+                db.users.update_one({'_id':ObjectId(friend_id)}, {'$set': {'friends': friend['friends']} })
+                
+                print(" I am added as their friend")
+            else:
+                print("already friends")
+
             return render_template("friend_profile.html", user = friend)
         else:
              return jsonify({"error": "User not found"}), 404
