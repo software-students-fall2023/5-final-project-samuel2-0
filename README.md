@@ -40,5 +40,5 @@ docker-compose up 
 samuelshally/5-final-project-samuel2-0-web
 ```
 
-![The letterbox](letterbox.jpg)
+![The letterbox](letterbox.JPG)
 
