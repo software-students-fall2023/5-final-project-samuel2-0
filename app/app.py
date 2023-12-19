@@ -54,13 +54,13 @@ def login():
         user = db.users.find_one({"email": email})
 
         if user is None:
-            print("USER NOT FOUND")
             incorrect_email = True
+            return jsonify({"error": "User not found"}), 401
 
         if user is not None:
             if password != user["password"]:
                 incorrect_pass = True
-                print("INCORRECT PASSWORD")
+                return jsonify({"error": "Incorrect password"}), 401
 
             else:
                 session["userid"] = str(user["_id"])
@@ -539,24 +539,20 @@ def add_to_friends():
 
         user_id = ObjectId(session["userid"])
         user = db.users.find_one({'_id': user_id})
-   
         if user and friend:
             if 'friends' not in user:
                 user['friends'] = [friend_id]
                 db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
-                print("Friend Added")
             elif friend_id not in user['friends']:
                 user['friends'].append(friend_id)
                 db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
-                print("Friend Added")
             else:
                 print("Already Friends")
-            
             return render_template("friend_profile.html", user = friend)
         else:
-            print ("User not found")
-    except:
-        print ("User not found")
+             return jsonify({"error": "User not found"}), 404
+    except Exception as e:
+         return jsonify({"error": str(e)}), 500
     
 
 
