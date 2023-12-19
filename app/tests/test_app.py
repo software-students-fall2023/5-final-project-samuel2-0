@@ -13,7 +13,16 @@ def client():
     """
     Creates a flask testing client to simmulate calls to the web-app.
     """
-    app.config["TESTING"] = True
-    with app.test_client() as client:
+    app.app.config["TESTING"] = True
+    with app.app.test_client() as client:
         yield client
+
+
+def test_welcome_route(client):
+    """
+    testing the landing page
+    """
+    response = client.get("/")
+    assert response.status_code == 200
+    assert b"Welcome" in response.data
 

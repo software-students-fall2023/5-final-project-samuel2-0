@@ -10,10 +10,14 @@
             <label for="to">To:</label>
             <select id="to" name="receiver_id" required>
                 {% for friend in friends %}
-                    <option value="{{ friend.id }}">{{ friend.username }}</option>
+                    <option  value="{{ friend._id }}">{{ friend.username }}</option>
                 {% endfor %}
             </select>
         </div>
+       <div>
+        <label for="header">Header</label>
+        <input type="text" id="header" name="header"><br><br>
+       </div>
         <div>
             <label for="letter">Letter:</label>
             <textarea id="letter" name="letter_text" rows="4" required></textarea>

@@ -3,7 +3,7 @@
 {% block container %}
   <h2>Edit Profile</h2>
 
-  <form method="post" action="{{ url_for('edit_profile', user_id = user._id) }}">
+  <form method="post" action="{{ url_for('edit_profile') }}">
     
     <div class="form-group">
       <label for="username">Username:</label>
