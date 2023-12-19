@@ -18,7 +18,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install --user pipenv
             pipenv --python ${{ matrix.python-version }}
-            pipenv install pytest
+            pipenv install pytest pytest-flask pymongo flask-cors
             pipenv install pytest-cov --dev
             pipenv install
       - name: Turn on 'editable' mode
