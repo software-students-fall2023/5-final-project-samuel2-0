@@ -542,6 +542,7 @@ def test_pal_profile(client, monkeypatch):
     assert response.status_code == 404
 
 
+
 """
 def test_see_friend(client, monkeypatch):
     with client.session_transaction() as session:
