@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block container %}
+  <h1 class="my-friends-h1">Your Friends</h1>
+
+  <div class="my-friends-container">
+
+    {% if friends %}
+        {% for friend in friends %}
+        <div class="friend">
+          <p class="my-friends-p">Name: {{friend.name}}</p>
+          <div class= "my-friends-button" id="button_div">
+            <form action="/findUser" method="POST">
+                <input type="hidden" name="userId" value="{{ friend._id }}" id="userId">
+                <button type="submit">Profile</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+    {% else %}
+      <p>You don't have any friends yet. :</p>
+    {% endif %}
+  </div>
+
+
+{% endblock %}
+
+

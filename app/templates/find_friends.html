@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+ {%block container %}
+
+    <body class="letterbox"> 
+        <form>
+            <label class = "filter-label" for="languageSelect">Select Language:</label>
+            <select class="filter-select" id="languageSelect" name="language">
+                <option value="English">English</option>
+                <option value="Dutch">Dutch</option>
+                <option value="German">German</option>
+                <option value="French">French</option>
+                <option value="Slovak">Slovak</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Italian">Italian</option>
+                <option value="Portuguese">Portuguese</option>
+                <option value="Russian">Russian</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Korean">Korean</option>
+                <option value="Arabic">Arabic</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Bengali">Bengali</option>
+                <option value="Turkish">Turkish</option>
+                <option value="Swedish">Swedish</option>
+                <option value="Greek">Greek</option>
+                <option value="Hebrew">Hebrew</option>
+                <option value="Polish">Polish</option>
+                <option value="Czech">Czech</option>
+                <option value="Danish">Danish</option>
+                <option value="Finnish">Finnish</option>
+                <option value="Norwegian">Norwegian</option>
+                <option value="Romanian">Romanian</option>
+                <option value="Dari">Dari</option>
+                <option value="Swahili">Swahili</option>
+                <option value="Tagalog">Tagalog</option>
+                <option value="Thai">Thai</option>
+                <option value="Vietnamese">Vietnamese</option>
+            </select>
+            <button class="lang-button-filter" type="button" onclick="filter_lang()">Filter Users</button>
+        </form>
+        
+        <form>
+            <label class = "filter-label" for="interestInput">Enter Interests:</label>
+            <input class= "filter-input" type="text" id="interestInput" name="interests">
+            <button class="interest-button-filter" type="button" onclick="filter_interest()">Filter Users</button>
+        </form>
+
+        <button class="reset-button" type="button" onclick="display_all()">Reset</button>
+
+        <div id="allLetters"> 
+            <div id="user_container">
+
+             
+
+            </div>
+        </div>
+        
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        var users = "";
+
+        $(document).ready(function() {
+            $.ajax({
+                url: '/getUsersJson',
+                type: 'GET',
+                dataType: 'json',
+                success: function(json_users) {
+                    users = json_users
+                    display_all()
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+
+        function display_all(){
+            console.log(users)
+                    
+            var userContainer = document.getElementById('user_container');
+            userContainer.innerHTML = "";
+
+            for (let i = 0; i < users.length; i++) {
+                console.log(users[i].email);
+                var userDiv = document.createElement('div');
+                userDiv.className = 'user';
+
+        
+                var paragraph = document.createElement('p');
+                paragraph.innerHTML = 'Name: ' + users[i].name + '<br>' +
+                                  'Username: ' + users[i].username + '<br>' +
+                                  'Languages: ' + users[i].languages.join(', ') + '<br>' +
+                                  'Interests: ' + users[i].interests.join(', ') + '<br>' +
+                                  'Country: ' + users[i].country + '<br>' +
+                                  'Age: ' + users[i].age;
+
+                var form = document.createElement('form');
+                form.action = '/findUser';
+                form.method = 'POST'; 
+
+                var userIdInput = document.createElement('input');
+                userIdInput.type = 'hidden';
+                userIdInput.name = 'userId';
+                userIdInput.value = String(users[i]._id);
+
+                var submitButton = document.createElement('button');
+                submitButton.type = 'submit';
+                submitButton.innerHTML = 'Profile';
+
+                form.appendChild(userIdInput);
+                form.appendChild(submitButton);
+
+                userDiv.appendChild(paragraph);
+                userDiv.appendChild(form);
+
+                userContainer.appendChild(userDiv);
+            }
+        }
+
+        function filter_lang() {
+            var lang = document.getElementById('languageSelect').value;
+
+            var userContainer = document.getElementById('user_container');
+            userContainer.innerHTML = '';
+
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].languages.includes(lang)) {
+                    var userDiv = document.createElement('div');
+                    userDiv.className = 'user';
+
+                    var paragraph = document.createElement('p');
+                    paragraph.innerHTML = 'Name: ' + users[i].name + '<br>' +
+                                  'Username: ' + users[i].username + '<br>' +
+                                  'Languages: ' + users[i].languages.join(', ') + '<br>' +
+                                  'Interests: ' + users[i].interests.join(', ') + '<br>' +
+                                  'Country: ' + users[i].country + '<br>' +
+                                  'Age: ' + users[i].age;
+
+                    var form = document.createElement('form');
+                    form.action = '/findUser';
+                    form.method = 'POST';
+
+                    var userIdInput = document.createElement('input');
+                    userIdInput.type = 'hidden';
+                    userIdInput.name = 'userId';
+                    userIdInput.value = String(users[i]._id);
+
+                    var submitButton = document.createElement('button');
+                    submitButton.type = 'submit';
+                    submitButton.innerHTML = 'Find User';
+
+                    form.appendChild(userIdInput);
+                    form.appendChild(submitButton);
+
+                    userDiv.appendChild(paragraph);
+                    userDiv.appendChild(form);
+
+                    userContainer.appendChild(userDiv);
+                }
+            }
+        }
+
+        function filter_interest() {
+        var interests = document.getElementById('interestInput').value;
+        console.log("got here");
+
+        var userContainer = document.getElementById('user_container');
+        userContainer.innerHTML = '';
+
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].interests.includes(interests)) {
+                var userDiv = document.createElement('div');
+                userDiv.className = 'user';
+
+                var paragraph = document.createElement('p');
+                paragraph.innerHTML = 'Name: ' + users[i].name + '<br>' +
+                                'Username: ' + users[i].username + '<br>' +
+                                'Languages: ' + users[i].languages.join(', ') + '<br>' +
+                                'Interests: ' + users[i].interests.join(', ') + '<br>' +
+                                'Country: ' + users[i].country + '<br>' +
+                                'Age: ' + users[i].age;
+                var form = document.createElement('form');
+                form.action = '/findUser';
+                form.method = 'POST';
+
+                var userIdInput = document.createElement('input');
+                userIdInput.type = 'hidden';
+                userIdInput.name = 'userId';
+                userIdInput.value = String(users[i]._id);
+
+                var submitButton = document.createElement('button');
+                submitButton.type = 'submit';
+                submitButton.innerHTML = 'Profile';
+
+                form.appendChild(userIdInput);
+                form.appendChild(submitButton);
+
+                userDiv.appendChild(paragraph);
+                userDiv.appendChild(form);
+
+                userContainer.appendChild(userDiv);
+            }
+        }
+    }
+
+     </script>
+
+ {% endblock %}

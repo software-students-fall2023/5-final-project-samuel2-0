@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Welcome to MyPenpal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: rgba(255, 255, 255, 0.738);
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .content-container {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 87px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 24px;
+            color: #555;
+            max-width: 400px;
+            margin: 20px 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            margin: 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            background-color: #5f1a19;
+            color: #fff;
+        }
+
+        button:hover {
+            background-color: #5b1d16;
+        }
+
+        .image-container {
+            flex: 1;
+            text-align: center;
+        }
+
+        img {
+            margin-top: 50px;
+            border: 1px solid #333;
+            max-width: 70%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <div class="content">
+            <h1>MyPenpal</h1>
+            {% if name %}
+                <p>Hello {{ name }}</p>
+            {% else %}
+                <p>Welcome to MyPenpal!</p>
+                <p>Please log in or register to continue.</p>
+                <a href="{{ url_for('login') }}"><button>Login</button></a>
+                <a href="{{ url_for('signup') }}"><button>Register</button></a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="image-container">
+        <img src="../static/images/man_writing_letter.jpeg" alt="Description of the image">
+    </div>
+</body>
+</html>

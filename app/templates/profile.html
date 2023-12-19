@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<body>
+  <div class="profile-container">
+
+    <div class="user-fields">
+      <h2 class="profile-h2">{{ user.username }}</h2>
+      <p class="profile-section-p"><strong>Name:</strong>  {{ user.name }}</p>
+      <p class="profile-section-p"><strong>Age:</strong>  {{ user.age }}</p>
+      <p class="profile-section-p"><strong>Country:</strong> {{ user.country }}</p>
+    </div>
+    <div class="profile-header">
+      <a href="{{ url_for('edit_profile', user_id=user._id) }}" class="profile-editBtn">Edit Profile</a>
+    </div>
+
+    <div class="profile-section" id="aboutMeSection">
+      <h3 class="profile-h3">About Me</h3>
+      <p class="profile-p">{{ user.about_me }}</p>
+      <a href="{{ url_for('edit_about', user_id=user._id) }}" class="profile-editBtn">Edit About</a>
+    </div>
+
+    <div class="profile-section" id="languagesSection">
+      <h3 class="profile-h3">Languages</h3>
+      <ul class="profile-ul">
+        {% for language in user.languages %}
+          <li class="profile-ul">{{ language }}</li>
+        {% endfor %}
+      </ul>
+      <a href="{{ url_for('edit_languages', user_id=user._id) }}" class="profile-editBtn">Edit Languages</a>
+    </div>
+
+    <div class="profile-section" id="interestsSection">
+      <h3 class="profile-h3">Interests</h3>
+      <ul class="profile-ul">
+        {% for interest in user.interests %}
+          <li class="profile-ul">{{ interest }}</li>
+        {% endfor %}
+      </ul>
+      <a href="{{ url_for('edit_interests', user_id=user._id) }}" class="profile-editBtn">Edit Interests</a>
+    </div>
+  </div>
+</body>
+{% endblock %}

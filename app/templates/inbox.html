@@ -1,0 +1,64 @@
+{% extends 'base.html' %} 
+
+
+{% block container %}
+
+<h1>Here is the inbox for you, {{user.username}}</h1>
+<form method="get" action="{{ url_for('send_letter') }}">
+    <button type="submit" class="btn btn-primary" >Write</button>
+</form>
+<br/>
+
+{% for letter in letters %}
+
+<div class="inbox-container" >
+    <div class="content1">
+        <p class="text-left">sent from {{letter.sender_name}} at {{letter.timestamp}}</p>
+        
+    </div>
+    <div class="content2 text-center">
+        <h3>{{ letter.header }}</h3>    
+        <button onclick="read_letter('{{ letter._id }}')"> Read </button>
+        
+    </div>
+
+    <div class="content3">
+        <form method="post" action="{{ url_for('remove_letter',letter_id=letter._id) }}">
+            <button type="submit" class="btn btn-danger" >X</button>
+        </form>
+    </div>
+
+
+    
+
+<br/>
+</div>
+
+
+{% endfor %}
+<script>
+
+    function read_letter(letterId) {
+       
+        fetch(`/read_letter/${letterId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            window.location.href = `/read_letter/${letterId}`;
+           
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+{% endblock %}
+
+
+

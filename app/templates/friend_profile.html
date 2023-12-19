@@ -1,0 +1,64 @@
+{% extends 'base.html' %} 
+{%block container %}
+
+<div class="friend-container">
+  <div id="button_div">
+    <input type="hidden" name="friendId" value="{{ user._id }}" id="friendId" />
+    <div>
+      <div>
+        <h1 class="friend-h1">{{user.username}} profile</h1>
+      </div>
+
+      <div class="user-fields">
+        <p class="friend-p">Name: {{user.name}}</p>
+        <p class="friend-p">Age: {{user.age}}</p>
+        <p class="friend-p">Country: {{user.country}}</p>
+      </div>
+    </div>
+
+    <div id="aboutMeSection">
+      <h3 class="friend-h3">About Me</h3>
+      <p class="friend-p">{{ user.about_me }}</p>
+    </div>
+
+    <div id="languagesSection">
+      <h3 class="friend-h3">Languages</h3>
+      <ul class="friend-ul">
+        {% for language in user.languages %}
+        <li class="friend-li">{{ language }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div id="interestsSection">
+      <h3 class="friend-h3">Interests</h3>
+      <ul class="friend-ul">
+        {% for interest in user.interests %}
+        <li class="friend-li">{{ interest }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    var button_container = document.getElementById("button_div");
+    var friend = document.getElementById("friendId");
+
+    console.log(friend.value);
+
+    var form = document.createElement("form");
+    form.action = "/add_to_friends";
+    form.method = "POST";
+
+    var submitButton = document.createElement("button");
+    submitButton.type = "submit";
+    submitButton.innerHTML = "Add Friend";
+
+    form.appendChild(friend);
+    form.appendChild(submitButton);
+
+    button_container.appendChild(form);
+  </script>
+
+  {% endblock %}
+</div>

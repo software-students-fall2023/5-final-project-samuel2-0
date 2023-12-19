@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block container %}
+  <div class="edit-about-container">
+    <h2 class="edit-about-form-heading">Edit About</h2>
+    
+    <form method="post" action="{{ url_for('edit_about', user_id=user._id) }}" class="edit-about-form">
+      <div class="edit-about-form-group">
+        <label for="about" class="edit-about-form-label">About:</label>
+        <textarea name="about" id="about" class="edit-about-form-input" required>{{ user.about_me }}</textarea>
+      </div>
+      
+      <button type="submit" class="edit-about-btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+{% endblock %}

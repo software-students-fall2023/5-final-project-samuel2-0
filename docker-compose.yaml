@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: . 
+      dockerfile: ./app/Dockerfile
+    ports:
+      - "5002:5000"
+    depends_on:
+      - mongodb
+    environment:
+      FLASK_APP: app/app.py
+    
+  mongodb:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"

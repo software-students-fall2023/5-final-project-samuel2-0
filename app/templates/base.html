@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Letterbox App</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/find-friends.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/inbox.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/profile.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit-profile.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit-about.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit-interests.css') }}"
+    />
+
+
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit-languages.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/friend-profile.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/my-friends.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/send-letter.css') }}"
+    />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap"
+      rel="stylesheet"
+    />
+ 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <style>
+      body,
+      h1,
+      h2,
+      h3,
+      p,
+      ul,
+      ol,
+      li,
+      figure,
+      figcaption,
+      blockquote,
+      dl,
+      dd,
+      dt {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Playfair Display", serif;
+        background-color: #f8f8f8;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        border: none;
+      }
+
+      .container {
+        flex: 1;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      footer {
+        position: fixed;
+        bottom: 0;
+        text-align: center;
+        width: 100%;
+        padding: 10px 0;
+        background-image: url("../static/images/trying4.jpeg");
+        color: #ecf0f1;
+      }
+
+      header {
+        display: flex;
+        background-image: url("../static/images/trying4.jpeg"); 
+        justify-content: space-between;
+        align-items: center;
+        color: #ecf0f1;
+        padding: 10px 20px;
+      }
+
+      header h1 {
+        font-size: 2em;
+        margin-right: 20px;
+      }
+
+      nav {
+        display: flex;
+      }
+
+      main {
+        flex: 1;
+        padding: 20px;
+        outline: none;
+      }
+
+      nav a {
+        color: #ecf0f1;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 1.2em;
+      }
+
+      @media only screen and (max-width: 768px) {
+        header h1 {
+          font-size: 1.5em;
+        }
+
+        nav a {
+          font-size: 1em;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Letterbox</h1>
+        <nav>
+          <a href="{{ url_for('inbox')}}">Inbox</a>
+          <a href="{{ url_for('send_letter')}}">Compose</a>
+          <a href="{{ url_for('my_friends')}}">Pals</a>
+          <a href="{{ url_for('find_friends')}}">Find Pals</a>
+          <a href="{{ url_for('myprofile')}}">Profile</a>
+          <a href="{{ url_for('logout')}}">Logout</a>
+        </nav>
+      </header>
+      <main>{% block container %} {% endblock %}</main>
+      <footer>
+        <p>Write a letter to a friend</p>
+      </footer>
+    </div>
+  </body>
+</html>
