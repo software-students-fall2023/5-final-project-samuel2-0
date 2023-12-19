@@ -3,16 +3,27 @@
 {% block container %}
   <h2>Your Friends</h2>
 
-  <div id="friends-list">
-    {% if user.friends %}
-      <ul>
-        {% for friend in user.friends %}
-          <li>{{ friend }}</li>
+  <div id="user_container">
+    {% if friends %}
+        {% for friend in friends %}
+        <div class="friend">
+          <p>Name: {{friend.name}}</p>
+          
+          <div id="button_div">
+            <form action="/findUser" method="POST">
+                <input type="hidden" name="userId" value="{{ friend._id }}" id="userId">
+                <button type="submit">Find User</button>
+            </form>
+          </div>
+
+        </div>
         {% endfor %}
-      </ul>
     {% else %}
       <p>You don't have any friends yet. :</p>
     {% endif %}
   </div>
 
+
 {% endblock %}
+
+
