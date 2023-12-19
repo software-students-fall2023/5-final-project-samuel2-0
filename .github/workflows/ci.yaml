@@ -8,7 +8,7 @@ jobs:
       matrix:
         python-version: ["3.7", "3.9", "3.11"]
     env:
-      MONGO_URI: "mongodb://localhost:27017"
+      MONGO_URI: "mongodb://mongo:27017"
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
