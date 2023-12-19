@@ -7,9 +7,10 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-          
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+
+
 def connection_db():
     """
     Connect to DB
@@ -173,30 +174,11 @@ def read_letter(letter_id):
         user = users_collection.find_one({"_id": ObjectId(userid)})
         print(letter_id, "is None ??")
         letter = letters_collection.find_one({"_id": ObjectId(letter_id)})
-       
+
         if user and letter:
             print("user and letter both exist")
             print("in read letter function : ", user, letter)
             return render_template("reading.html", user=user, letter=letter)
-    return redirect(url_for("login"))
-
-
-@app.route("/fakeALetter")
-def fake_letter():
-    sender_id = "657be1c210f97adccd73219b"
-    receiver_id = "657cfca3d111878b03b0e4da"
-    sender_name = users_collection.find_one({"_id": ObjectId(sender_id)})["username"]
-
-    new_letter = {
-        "sender_id": ObjectId(sender_id),
-        "sender_name": sender_name,
-        "receiver_id": ObjectId(receiver_id),
-        "header": "Holy Holy",
-        "letter_text": "Hi God bless! <p>Holy Holy Holy,Holy Holy Holy,Holy Holy Holy\n,Holy Holy Holy,Holy Holy Holy</p>",
-        "timestamp": datetime.now(),
-    }
-    letters_collection.insert_one(new_letter)
-    print("successfully faked a letter")
     return redirect(url_for("login"))
 
 
@@ -245,6 +227,7 @@ def myprofile():
                 render_template("404.html", message="User not found. Log in first."),
                 404,
             )
+
 
 @app.route("/profile/edit_profile", methods=["GET"])
 def edit_profile():
@@ -389,6 +372,7 @@ def pal_profile():
     else:
         return render_template("404.html", message="User not found. Log in first."), 404
 
+
 @app.route("/pal_profile", methods=["POST"])
 def see_friend():
     try:
@@ -415,19 +399,20 @@ def send_letter():
             user = get_user(userid)
 
             if request.method == "GET":
-
                 friends_array = []
-                if 'friends' in user:
-                    for friend_id_obj in user['friends']:
+                if "friends" in user:
+                    for friend_id_obj in user["friends"]:
                         try:
-                            friend = db.users.find_one({'_id': ObjectId(friend_id_obj)})
+                            friend = db.users.find_one({"_id": ObjectId(friend_id_obj)})
                             if friend:
                                 friends_array.append(friend)
                             else:
-                                print(f"Friend with ID {friend_id_obj} not found in the database.")
+                                print(
+                                    f"Friend with ID {friend_id_obj} not found in the database."
+                                )
                         except:
                             print(f"Invalid friend ID: {friend_id_obj}")
-                
+
                 return render_template("send_letter.html", friends=friends_array)
             else:
                 sender_id = session["userid"]
@@ -459,28 +444,34 @@ def send_letter():
 
 @app.route("/my_friends", methods=["GET"])
 def my_friends():
-    if "userid" in session:
-        userid = session["userid"]
-        user = get_user(userid)
+    try:
+        if "userid" in session:
+            userid = session["userid"]
+            user = get_user(userid)
 
-        if user:
-            friends_array = []
-            if 'friends' in user:
-        
-                for friend_id_obj in user['friends']:
-                    try:
-                        friend = db.users.find_one({'_id': ObjectId(friend_id_obj)})
-
-                        if friend:
-                            friends_array.append(friend)
-                        else:
-                            print(f"Friend with ID {friend_id_obj} not found in the database.")
-                    except:
-                        print(f"Invalid friend ID: {friend_id_obj}")
-                
-            return render_template("my_friends.html", friends = friends_array)
-    else:
-        return render_template("404.html", message="User not found. Log in first."), 404
+            if user:
+                friends_array = []
+                if "friends" in user:
+                    for friend_id_obj in user["friends"]:
+                        try:
+                            friend = db.users.find_one({"_id": ObjectId(friend_id_obj)})
+                            if friend:
+                                friends_array.append(friend)
+                            else:
+                                print(
+                                    f"Friend with ID {friend_id_obj} not found in the database."
+                                )
+                        except Exception as e:
+                            print(
+                                f"Error processing friend with ID {friend_id_obj}: {e}"
+                            )
+                    return jsonify({"friends": friends_array})
+                else:
+                    return jsonify({"error": "No friends found for the user."}), 404
+        else:
+            return jsonify({"error": "User not found. Log in first."}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/find_friends", methods=["GET"])
@@ -497,65 +488,68 @@ def find_friends():
 
 ### SAMUEL'S STUFF - DO NOT TOUCH!
 
+
 @app.route("/getUsersJson", methods=["GET"])
 def get_all_users_json():
-     if "userid" in session:
+    if "userid" in session:
         userid = session["userid"]
         current_user = get_user(userid)
         all_users = get_all_users()
         users_list = []
-        for user in all_users:  
-            if(user != current_user):
-                new_user = {**user, '_id': str(user['_id'])}
+        for user in all_users:
+            if user != current_user:
+                new_user = {**user, "_id": str(user["_id"])}
                 users_list.append(new_user)
-        return jsonify(users_list) 
-     else:
+        return jsonify(users_list)
+    else:
         return render_template("404.html", message="User not found. Log in first."), 404
 
 
-# Add friend && start letter 
+# Add friend && start letter
 @app.route("/findUser", methods=["POST"])
 def find_user():
     try:
-        user_id = request.form.get('userId')
+        user_id = request.form.get("userId")
         user_id_obj = ObjectId(user_id)
-        user = db.users.find_one({'_id': user_id_obj})
+        user = db.users.find_one({"_id": user_id_obj})
         if user:
             return render_template("friend_profile.html", user=user)
         else:
-            return jsonify({'result': 'Failed, but tried'})
+            return jsonify({"result": "Failed, but tried"})
     except Exception as e:
         print(e)
-        return jsonify({'result': 'failed'})
-    
-    
+        return jsonify({"result": "failed"})
+
+
 @app.route("/add_to_friends", methods=["POST"])
 def add_to_friends():
-    friend_id = request.form.get('friendId')
+    friend_id = request.form.get("friendId")
 
     try:
         friend_id_obj = ObjectId(friend_id)
-        friend = db.users.find_one({'_id': friend_id_obj})
+        friend = db.users.find_one({"_id": friend_id_obj})
 
         user_id = ObjectId(session["userid"])
-        user = db.users.find_one({'_id': user_id})
+        user = db.users.find_one({"_id": user_id})
         if user and friend:
-            if 'friends' not in user:
-                user['friends'] = [friend_id]
-                db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
-            elif friend_id not in user['friends']:
-                user['friends'].append(friend_id)
-                db.users.update_one({'_id': user_id}, {'$set': {'friends': user['friends']}})
+            if "friends" not in user:
+                user["friends"] = [friend_id]
+                db.users.update_one(
+                    {"_id": user_id}, {"$set": {"friends": user["friends"]}}
+                )
+            elif friend_id not in user["friends"]:
+                user["friends"].append(friend_id)
+                db.users.update_one(
+                    {"_id": user_id}, {"$set": {"friends": user["friends"]}}
+                )
             else:
                 print("Already Friends")
-            return render_template("friend_profile.html", user = friend)
+            return render_template("friend_profile.html", user=friend)
         else:
-             return jsonify({"error": "User not found"}), 404
+            return jsonify({"error": "User not found"}), 404
     except Exception as e:
-         return jsonify({"error": str(e)}), 500
-    
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
