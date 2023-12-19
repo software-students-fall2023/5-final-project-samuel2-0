@@ -15,7 +15,7 @@ def connection_db():
     """
     Connect to DB
     """
-    return MongoClient("mongodb://localhost:27017/")
+    return MongoClient("mongodb://mongodb:27017")
 
 
 client = connection_db()
