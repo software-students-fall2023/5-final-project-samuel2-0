@@ -1,0 +1,126 @@
+body {
+  background-color: antiquewhite;
+}
+
+#user_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.user, .friend {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  margin: 10px;
+  box-sizing: border-box;
+  padding: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.lang-button-filter {
+  background-color: #932a2a;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.lang-button-filter:hover {
+  background-color: #e1985f;
+}
+
+.interest-button-filter {
+  background-color: #932a2a;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.interest-button-filter:hover {
+  background-color: #b76434;
+}
+
+.reset-button {
+  background-color: #dc3545;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reset-button:hover {
+  background-color: #c82333;
+}
+
+
+.user:hover, .friend:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.user button, .friend button {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  right: 10px;
+  display: block;
+  width: 100px;
+  padding: 10px;
+  background-color: #932a2a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.user button:hover, .friend button:hover {
+  background-color: #d27759;
+}
+
+.user p,
+.friend p {
+    font-size: 18px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+.user span, .friend span {
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-label {
+  margin-bottom: 8px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.filter-select, .filter-input {
+  width: 10%;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+

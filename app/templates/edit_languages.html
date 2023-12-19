@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block container %}
-  <h2>Edit Languages</h2>
   <form method="post" action="{{ url_for('edit_languages', user_id=user._id) }}" id="languages-form">
 
     <div id="languages-container">
+      <h2 class="edit-languages-h2">Edit Languages</h2>
       {% for language in user.languages %}
         <div class="language-box">
           <input type="text" name="languages[]" class="form-control" required value="{{ language }}">

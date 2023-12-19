@@ -1,0 +1,44 @@
+/* edit-interests.css */
+
+
+.interests-heading {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+#interests-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  #interests-container {
+    margin-bottom: 20px;
+  }
+  
+  .interest-box {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .remove-interest {
+    margin-left: 10px;
+    padding: 8px;
+    background-color: #622121;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  

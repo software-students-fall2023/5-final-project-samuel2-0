@@ -1,0 +1,87 @@
+/* Profile page styling */
+
+  .profile-container {
+    margin: 20px auto; 
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    display: flex; 
+    flex-wrap: wrap; 
+    border-radius: 8px;
+  }
+
+  .profile-header {
+    text-align: left;
+    margin-bottom: 20px;
+    flex-basis: 100%;
+  }
+
+  .user-fields {
+    margin-bottom: 20px;
+    flex-basis: 100%; 
+  }
+
+  .profile-editBtn {
+    background-color: #622121;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .profile-editBtn:hover {
+    background-color: #450909;
+  }
+
+  .profile-section {
+    margin-bottom: 30px;
+    flex-basis: calc(50% - 20px); 
+  }
+
+  .profile-h2 {
+    margin-bottom: 10px;
+    font-size: 36px;
+    color: #333;
+    text-align: center;
+  }
+
+  .profile-h3 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #622121;
+  }
+
+  .profile-section-p{
+    font-size: 24px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #000000;
+  }
+
+  .profile-p {
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #000000;
+  }
+  
+  .profile-ul {
+    list-style-type: none; 
+    padding: 0; 
+    font-size: 20px;
+    margin: 10px 0;
+  }
+
+  .profile-li {
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: #555;
+  }

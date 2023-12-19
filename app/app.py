@@ -267,7 +267,6 @@ def myprofile():
             )
     return redirect(url_for("login"))
 
-
 @app.route("/profile/edit_profile", methods=["GET"])
 def edit_profile():
     if "userid" in session:
@@ -498,14 +497,18 @@ def find_friends():
 
 @app.route("/getUsersJson", methods=["GET"])
 def get_all_users_json():
-    all_users = get_all_users()
-
-    users_list = []
-    for user in all_users:  
-        new_user = {**user, '_id': str(user['_id'])}
-        users_list.append(new_user)
-    
-    return jsonify(users_list) 
+     if "userid" in session:
+        userid = session["userid"]
+        current_user = get_user(userid)
+        all_users = get_all_users()
+        users_list = []
+        for user in all_users:  
+            if(user != current_user):
+                new_user = {**user, '_id': str(user['_id'])}
+                users_list.append(new_user)
+        return jsonify(users_list) 
+     else:
+        return render_template("404.html", message="User not found. Log in first."), 404
 
 
 # Add friend && start letter 
