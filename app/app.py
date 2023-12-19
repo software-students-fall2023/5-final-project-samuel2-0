@@ -7,7 +7,9 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+          
 def connection_db():
     """
     Connect to DB
@@ -211,8 +213,8 @@ def personal_info():
                 country = request.form["country"]
                 about_me = request.form["about_me"]
                 age = request.form["age"]
-                languages = request.form.getlist("languages[]")
-                interests = request.form.getlist("interests[]")
+                languages = request.form.getlist("languages")
+                interests = request.form.getlist("interests")
                 users_collection.update_one(
                     {"_id": ObjectId(user.get("_id"))},
                     {
@@ -388,22 +390,15 @@ def pal_profile():
     else:
         return render_template("404.html", message="User not found. Log in first."), 404
 
-
 @app.route("/pal_profile", methods=["POST"])
-def add_friend(user_id):
+def see_friend():
     try:
+        user_id = session["userid"]
         user = get_user(user_id)
         if user:
             friend_id = request.form.get("friend_id")
-            if "friends" not in user:
-                user["friends"] = []
-            user["friends"].append(friend_id)
             if friend_id:
-                users_collection.update_one(
-                    {"_id": ObjectId(user["_id"])},
-                    {"$set": {"friends": user["friends"]}},
-                )
-                return render_template("friend_profile.html", user=user)
+                return render_template("friend_profile.html", user=friend_id)
             else:
                 raise ValueError("Friend ID not provided in the form data.")
         else:
@@ -522,15 +517,14 @@ def find_user():
         user_id = request.form.get('userId')
         user_id_obj = ObjectId(user_id)
         user = db.users.find_one({'_id': user_id_obj})
-
         if user:
             return render_template("friend_profile.html", user=user)
         else:
             return jsonify({'result': 'Failed, but tried'})
-
     except Exception as e:
         print(e)
         return jsonify({'result': 'failed'})
+    
     
 @app.route("/add_to_friends", methods=["POST"])
 def add_to_friends():
