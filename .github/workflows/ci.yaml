@@ -26,6 +26,6 @@ jobs:
           pipenv install -e .
       - name: Test with pytest
         run: |
-          cd $GITHUB_WORKSPACE/web_app
+          cd $GITHUB_WORKSPACE/app/tests
           pipenv run python -m pytest
           pipenv run python -m pytest --cov=. --cov-report xml --cov-fail-under=80
